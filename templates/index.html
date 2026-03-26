@@ -190,30 +190,65 @@ function startQuiz(){
     // QUESTIONS LOGIC
     if(userData.subDepartment === "OPSTEST"){
         questions = [
-            {q:"SLA stands for?",options:["Service Level Agreement","Other","Other","Other"],answer:0},
-            {q:"Main goal of OPS?",options:["Dev","Design","Smooth ops","Sales"],answer:2},
-            {q:"Ticket tool?",options:["Excel","ServiceNow","Word","Paint"],answer:1},
-            {q:"TAT means?",options:["Time","Turn Around Time","Task","None"],answer:1},
-            {q:"Escalation when?",options:["Done","Delay","Start","Mail"],answer:1},
-            {q:"KPI?",options:["Key Performance Indicator","Other","Other","Other"],answer:0},
-            {q:"Daily task?",options:["Coding","Monitoring","Design","Dev"],answer:1},
-            {q:"RCA?",options:["Assign","Root cause","Close","Report"],answer:1},
-            {q:"Downtime?",options:["Work","System down","Break","Login"],answer:1},
-            {q:"Critical priority?",options:["Low","Med","High","None"],answer:2}
-        ];
+    {"q": "Customer cannot Track awb status in website without login", "options": ["True", "False"], "answer": 1},
+    {"q": "Field in-scan of shipments can be done from office", "options": ["True", "False"], "answer": 1},
+    {"q": "Rejected AWB while In-scan can be returned back to:", "options": ["To Shipper", "Cs In-Charge", "Info IT In-Charge and get data for further process"], "answer": 2},
+    {"q": "Delivery of OTP enabled shipments needs to be delivered only with OTP", "options": ["True", "False"], "answer": 0},
+    {"q": "Delivery Status of the shipment via OTM to be updated", "options": ["From Field", "From Office", "From Home"], "answer": 0},
+    {"q": "For Booking International shipments, Consignee address book needs to be updated (Mandatory)", "options": ["True", "False"], "answer": 0},
+    {"q": "Digital payments while delivery is prohibited", "options": ["True", "False"], "answer": 1},
+    {"q": "Shipping data of Customer is available for last 90 days only", "options": ["True", "False"], "answer": 0},
+    {"q": "I can save critical data in the local hard disk of the pc", "options": ["True", "False"], "answer": 1},
+    {"q": "Bulk status update in OTM devices, sync not happening, how to prevent this?", "options": ["Keep Restarting the Device", "Call IT Person", "Do Manual sync at Regular Intervals"], "answer": 2},
+    {"q": "Delivered Shipments Status not Syncing with C2NG, what to do?", "options": ["Do manual status update", "Share backup file to IT person", "Redo the process"], "answer": 1},
+    {"q": "EMAIL received from suspicious ID asking to click URL & forward same", "options": ["Do as said in Mail", "Immediately delete mail & report to IT", "Take no action"], "answer": 1},
+    {"q": "In BlueDart, Teams Chat History remains for how many days?", "options": ["30 Days", "180 Days", "90 Days", "None of the above"], "answer": 1},
+    {"q": "Which of the following is NOT allowed as per IT policy?", "options": ["Using Guest Wi-Fi for external laptops", "Saving critical data on local hard disk", "Accessing C2NG portal with 2FA", "Using Microsoft Edge for enterprise portal"], "answer": 1},
+    {"q": "What is the correct way to handle OTP-enabled deliveries?", "options": ["Deliver without OTP if customer requests", "Deliver only after OTP verification", "Call IT for OTP bypass", "Use any random OTP"], "answer": 1},
+    {"q": "What should you do if BYOD device fails to send OTP to customer?", "options": ["Change mobile immediately", "Check network of delivery staff & customer", "Ignore and deliver without OTP", "Reset the app without informing IT"], "answer": 1},
+    {"q": "If you receive an email asking for your login credentials, what is the correct action?", "options": ["Reply with your credentials", "Report the email to IT immediately", "Forward the email to colleagues", "Click the link to verify"], "answer": 1},
+    {"q": "Sharing your password with your boss or colleagues is:", "options": ["Allowed in emergencies", "Strictly prohibited", "Allowed if approved by IT", "Allowed for faster work"], "answer": 1}
+];
     } else {
         questions = [
-            {q:"Capital of India?",options:["Mumbai","Delhi","Chennai","Kolkata"],answer:1},
-            {q:"2+2?",options:["3","4","5","6"],answer:1},
-            {q:"HTML stands for?",options:["Markup","Other","Other","Other"],answer:0},
-            {q:"CSS is used for?",options:["Styling","Logic","DB","Server"],answer:0},
-            {q:"JS stands for?",options:["Java","JavaScript","Other","None"],answer:1},
-            {q:"Sun rises?",options:["West","East","North","South"],answer:1},
-            {q:"5*3?",options:["15","10","20","25"],answer:0},
-            {q:"Water formula?",options:["H2O","CO2","O2","NaCl"],answer:0},
-            {q:"Earth is?",options:["Star","Planet","Moon","Comet"],answer:1},
-            {q:"Fastest animal?",options:["Lion","Tiger","Cheetah","Horse"],answer:2}
-        ];
+    {"q": "What is ISAT", "options": ["Information System Awareness Training", "Information Security Awareness Training", "Information Security Awareness Technology"], "answer": 1},
+    {"q": "Password Management", "options": ["Do Not Record password on Paper", "Never Share your password", "At least 15 characters long", "All The Above"], "answer": 3},
+    {"q": "Allowing unauthorized personnel to access the system", "options": ["Yes, it’s a Business Need", "No, don’t Allow unauthorised personnel"], "answer": 1},
+    {"q": "Email Attachments – Best Practices", "options": ["Avoid unknown senders", "Do not respond to unauthorized info requests", "Delete junk/phishing and inform IT", "All the Above"], "answer": 3},
+    {"q": "We can connect pen drive / Mobile in office pc", "options": ["Yes", "No. don't connect such devices"], "answer": 1},
+    {"q": "What is BCP", "options": ["Business Continuity Plan", "Business Computer policy", "Business compliance policy"], "answer": 0},
+    {"q": "Customer Data Handling", "options": ["Store for 1 month", "Keep in Onedrive", "Store in mail folder", "Delete immediately after processing"], "answer": 3},
+    {"q": "What is DPP", "options": ["Data Privacy Policy", "Data Private Policy", "Data Protection Policy"], "answer": 2},
+    {"q": "Who must adhere to Data Privacy Policy?", "options": ["All employees, vendors, partners", "Only BD Employee", "Applicable only for IT Employee"], "answer": 0},
+    {"q": "Personal data should only be collected for", "options": ["Business Purpose", "Personal use"], "answer": 0},
+    {"q": "Policy regarding external laptops?", "options": ["Connect after approval", "Strictly prohibited; Guest network only", "Connect if antivirus installed", "No restriction"], "answer": 1},
+    {"q": "Requirements for C2NG / Enterprise Portal via internet?", "options": ["No authentication", "MFA, Win 10+, Edge/Chrome", "Internal network only", "VPN only"], "answer": 1},
+    {"q": "Mailbox size for O365 license types?", "options": ["E3 – 99 GB; F3R+ – 2 GB", "E3 – 50 GB; F3R+ – 10 GB", "Both 99 GB", "E3 – Unlimited; F3R+ – 2 GB"], "answer": 0},
+    {"q": "Who cascades approved scope to RSA and RITH?", "options": ["CISSO", "Head-IT", "AISA", "RSA"], "answer": 2},
+    {"q": "Who recommends RSA appointment to AISA?", "options": ["CISSO", "RITH", "Head-IT", "SA"], "answer": 1},
+    {"q": "Who decides the audit team to visit locations?", "options": ["AISA only", "RSA/RITH", "CISSO", "SA"], "answer": 1},
+    {"q": "Location with >3 severe non-compliances audited by:", "options": ["SA only", "CISSO and Head-IT", "RSA/RITH", "AISA only"], "answer": 3},
+    {"q": "Key independence requirement for Security Auditors?", "options": ["Same department", "Nominated by users", "No responsibility for audited area", "Report to Head-IT"], "answer": 2},
+    {"q": "Who forwards audit schedule to SAs?", "options": ["AISA", "RSA", "RITH", "CISSO"], "answer": 1},
+    {"q": "Approval workflow for Security Auditors?", "options": ["AISA selects directly", "RSA recommends; RITH/AISA approve", "CISSO appoints", "SA appoints themselves"], "answer": 1},
+    {"q": "Role of AISA in audit process?", "options": ["Field audits", "Approves scope and appointments", "Manages ESP module", "Reports non-compliance"], "answer": 1},
+    {"q": "Tool referenced for audit scheduling?", "options": ["Online Tracker", "ESP Audit module", "Risk Register", "GRC Dashboard"], "answer": 1},
+    {"q": "Primary purpose of APIGEE?", "options": ["Invoices", "Secure API integration", "Physical shipments", "Customer IDs"], "answer": 1},
+    {"q": "Blue Dart APIs use REST and HTTPS?", "options": ["TRUE", "FALSE"], "answer": 0},
+    {"q": "Role of SaaS providers in logistics?", "options": ["Hardware", "Plug-ins and pre-integrated APIs", "Replace tracking", "Manual entry"], "answer": 1},
+    {"q": "NOT an e-store platform mentioned?", "options": ["Shopify", "Magento", "WooCommerce", "Oracle ERP"], "answer": 3},
+    {"q": "Protects data from unauthorized access?", "options": ["Formatting", "Encryption", "Copy-paste", "Zoom"], "answer": 1},
+    {"q": "Use of cloud storage?", "options": ["Offline programs", "Physical drives only", "Access over internet", "Printing"], "answer": 2},
+    {"q": "What does API stand for?", "options": ["Application Programming Interface", "Advanced Programming Interface", "Application Programming Integration", "Automated Program Interface"], "answer": 0},
+    {"q": "What does REST stand for?", "options": ["Remote Execution", "Representational State Transfer", "Reliable State Transfer", "Resource Technology"], "answer": 1},
+    {"q": "Data format most used in APIs?", "options": ["XML", "CSV", "JSON", "HTML"], "answer": 2},
+    {"q": "What is an API endpoint?", "options": ["Server", "User interface", "Specific URL for requests", "Language"], "answer": 2},
+    {"q": "Common API authentication method?", "options": ["CAPTCHA", "API Key", "HTML Form", "CSS Token"], "answer": 1},
+    {"q": "Status code for 'Unauthorized'?", "options": ["200", "400", "401", "403"], "answer": 2},
+    {"q": "What does HTTPS provide in APIs?", "options": ["Speed", "Encryption and security", "Payload", "UI support"], "answer": 1},
+    {"q": "What is API documentation used for?", "options": ["Auto-code", "Explaining how to use API", "Hosting", "Performance"], "answer": 1},
+    {"q": "Upload soft data to portal AND share as mail attachment?", "options": ["TRUE", "FALSE"], "answer": 1}
+];
     }
 
     document.getElementById("formSection").classList.add("d-none");
