@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz App</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+   :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #34495e;
+        --accent-color: #3498db;
+        --bg-light: #f8f9fa;
+    }
+
+    body { 
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .quiz-container {
+        max-width: 700px;
+        margin: 50px auto;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    h3 { 
+        color: var(--primary-color);
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        border-color: var(--accent-color);
+    }
+
+    .btn-primary {
+        background-color: var(--accent-color);
+        border: none;
+        padding: 12px;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: transform 0.2s;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-1px);
+    }
+
+    .option-btn {
+        width: 100%;
+        text-align: left;
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        background: white;
+        transition: all 0.2s ease;
+    }
+
+    .option-btn:hover {
+        border-color: var(--accent-color);
+        background-color: #ebf5fb;
+        color: var(--accent-color);
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- FORM -->
+<div class="quiz-container" id="formSection">
+<h3 class="text-center mb-3">Employee Quiz</h3>
+
+<div class="row">
+
+<select class="form-select mb-2" id="region">
+<option value="">-- Select Region --</option>
+<option value="EAST">EAST</option>
+<option value="NORTH">NORTH</option>
+<option value="SOUTH">SOUTH</option>
+<option value="WEST">WEST</option>
+</select>
+
+
+
+<input class="form-control mb-2" id="location" placeholder="Location">
+<input class="form-control mb-2" id="empCode" placeholder="Employee Code">
+<input class="form-control mb-2" id="name" placeholder="Name">
+</div>
+
+<select class="form-select mb-2" id="functionSelect">
+<option value="">-- Select Department --</option>
+<option value="OPS">OPS</option>
+<option value="CS">CS</option>
+<option value="IT">IT</option>
+<option value="SEC">SEC</option>
+</select>
+
+<select class="form-select mb-2" id="subDept">
+<option value="">-- Select Sub Department --</option>
+</select>
+
+<button type="button" class="btn btn-primary w-100" id="startBtn">Start Quiz</button>
+</div>
+
+<!-- QUIZ -->
+<div class="quiz-container d-none" id="quizSection">
+<h5 id="question"></h5>
+<div id="answers" class="d-flex flex-wrap gap-2 mt-3"></div>
+</div>
+
+<!-- RESULT -->
+<div class="quiz-container d-none" id="resultSection">
+<h3>Result</h3>
+<p id="userDetails"></p>
+<h4 id="scoreText"></h4>
+<p id="insertStatus"></p>
+</div>
+
+</div>
+
+<script>
+
+// GLOBAL
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let userData = {};
+const today = new Date().toISOString().split('T')[0];
+
+// READY
+document.addEventListener("DOMContentLoaded", function(){
+
+    document.getElementById("startBtn").addEventListener("click", startQuiz);
+
+    document.getElementById("functionSelect").addEventListener("change", function(){
+        const sub = document.getElementById("subDept");
+        sub.innerHTML = "<option value=''>-- Select Sub Department --</option>";
+
+        if(["OPS","CS","SEC"].includes(this.value)){
+            sub.innerHTML += "<option value='OPSTEST'>Operations Assessment</option>";
+        }
+        else if(this.value==="IT"){
+            sub.innerHTML += "<option value='ITTEST'>IT Assessment</option>";
+        }
+    });
+
+});
+
+// START
+function startQuiz(){
+
+    currentQ = 0;
+    score = 0;
+
+    userData = {
+        region: document.getElementById("region").value,
+        location: document.getElementById("location").value,
+        empCode: document.getElementById("empCode").value,
+        name: document.getElementById("name").value,
+        function: document.getElementById("functionSelect").value,
+        subDepartment: document.getElementById("subDept").value,
+        date: today
+    };
+
+    if(!userData.name || !userData.empCode || !userData.region || !userData.function || !userData.subDepartment){
+        alert("Fill all required fields");
+        return;
+    }
+
+    // QUESTIONS LOGIC
+    if(userData.subDepartment === "OPSTEST"){
+        questions = [
+            {q:"SLA stands for?",options:["Service Level Agreement","Other","Other","Other"],answer:0},
+            {q:"Main goal of OPS?",options:["Dev","Design","Smooth ops","Sales"],answer:2},
+            {q:"Ticket tool?",options:["Excel","ServiceNow","Word","Paint"],answer:1},
+            {q:"TAT means?",options:["Time","Turn Around Time","Task","None"],answer:1},
+            {q:"Escalation when?",options:["Done","Delay","Start","Mail"],answer:1},
+            {q:"KPI?",options:["Key Performance Indicator","Other","Other","Other"],answer:0},
+            {q:"Daily task?",options:["Coding","Monitoring","Design","Dev"],answer:1},
+            {q:"RCA?",options:["Assign","Root cause","Close","Report"],answer:1},
+            {q:"Downtime?",options:["Work","System down","Break","Login"],answer:1},
+            {q:"Critical priority?",options:["Low","Med","High","None"],answer:2}
+        ];
+    } else {
+        questions = [
+            {q:"Capital of India?",options:["Mumbai","Delhi","Chennai","Kolkata"],answer:1},
+            {q:"2+2?",options:["3","4","5","6"],answer:1},
+            {q:"HTML stands for?",options:["Markup","Other","Other","Other"],answer:0},
+            {q:"CSS is used for?",options:["Styling","Logic","DB","Server"],answer:0},
+            {q:"JS stands for?",options:["Java","JavaScript","Other","None"],answer:1},
+            {q:"Sun rises?",options:["West","East","North","South"],answer:1},
+            {q:"5*3?",options:["15","10","20","25"],answer:0},
+            {q:"Water formula?",options:["H2O","CO2","O2","NaCl"],answer:0},
+            {q:"Earth is?",options:["Star","Planet","Moon","Comet"],answer:1},
+            {q:"Fastest animal?",options:["Lion","Tiger","Cheetah","Horse"],answer:2}
+        ];
+    }
+
+    document.getElementById("formSection").classList.add("d-none");
+    document.getElementById("quizSection").classList.remove("d-none");
+
+    loadQuestion();
+}
+
+// LOAD
+function loadQuestion(){
+    const q = questions[currentQ];
+
+    document.getElementById("question").innerText = `Q${currentQ+1}. ${q.q}`;
+
+    const ansDiv = document.getElementById("answers");
+    ansDiv.innerHTML = "";
+
+    q.options.forEach((opt,i)=>{
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.className = "btn btn-outline-primary option-btn";
+        btn.onclick = ()=>checkAnswer(i);
+        ansDiv.appendChild(btn);
+    });
+}
+
+// CHECK
+function checkAnswer(selected){
+
+    const btns = document.querySelectorAll(".option-btn");
+
+    btns.forEach((b,i)=>{
+        if(i===questions[currentQ].answer) b.classList.add("btn-success");
+        else if(i===selected) b.classList.add("btn-danger");
+        b.disabled=true;
+    });
+
+    if(selected===questions[currentQ].answer) score++;
+
+    currentQ++;
+
+    setTimeout(()=>{
+        if(currentQ < questions.length) loadQuestion();
+        else showResult();
+    },10);
+}
+
+// RESULT
+function showResult(){
+
+    document.getElementById("quizSection").classList.add("d-none");
+    document.getElementById("resultSection").classList.remove("d-none");
+
+    document.getElementById("userDetails").innerText =
+        `Name: ${userData.name} | Emp: ${userData.empCode} | Dept: ${userData.function} | Sub: ${userData.subDepartment}`;
+
+    document.getElementById("scoreText").innerText =
+        `Score: ${score} / ${questions.length}`;
+
+    fetch('/insert',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({...userData, score, total:questions.length})
+    })
+    .then(res=>res.json())
+    .then(d=>{
+        document.getElementById("insertStatus").innerText = "DB: " + d.message;
+    })
+    .catch(()=>{
+        document.getElementById("insertStatus").innerText = "DB Error";
+    });
+}
+
+</script>
+
+</body>
+</html>

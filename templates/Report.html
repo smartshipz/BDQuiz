@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Report</title>
+    <style>
+        table { border-collapse: collapse; width: 70%; margin: auto; }
+        th, td { border: 1px solid black; padding: 10px; text-align: center; }
+        th { background-color: lightblue; }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Quiz Score Report</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Date</th>
+            <th>Region</th>
+            <th>Location</th>
+            <th>Emplcode</th>
+            <th>Name</th>
+            <th>Function</th>
+            <th>Score</th>
+            <th>Percentage</th>
+        </tr>
+        {% for student in students %}
+        <tr>
+            <td>{{ student[0] }}</td>
+            <td>{{ student[6] }}</td>
+            <td>{{ student[1] }}</td>
+            <td>{{ student[2] }}</td>
+            <td>{{ student[3] }}</td>
+            <td>{{ student[4] }}</td>
+            <td>{{ student[5] }}</td>
+            <td>{{ student[7] }}</td>
+            <td>{{ student[7]/10 *100 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <div style="text-align:center; margin-top:20px;">
+    <button onclick="exportToCSV()" 
+        style="padding:10px 20px; font-size:16px; background-color:blue; color:white; border:none; border-radius:5px;">
+        Export to CSV
+    </button>
+</div>
+    <div style="text-align:center;">
+        <a href="/">Go to Quiz</a>
+    </div>
+</body>
+<script>
+function exportToCSV() {
+    let table = document.querySelector("table");
+    let rows = table.querySelectorAll("tr");
+
+    let csv = [];
+
+    rows.forEach(row => {
+        let cols = row.querySelectorAll("th, td");
+        let rowData = [];
+
+        cols.forEach(col => {
+            // Clean text and escape quotes
+            let data = col.innerText.replace(/"/g, '""');
+            rowData.push('"' + data + '"');
+        });
+
+        csv.push(rowData.join(","));
+    });
+
+    // Create CSV file
+    let csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(csvFile);
+    link.download = "Quiz_Report.csv";
+    link.click();
+}
+</script>
+</html>
