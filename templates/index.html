@@ -109,14 +109,15 @@
 
 <select class="form-select mb-2" id="functionSelect">
 <option value="">-- Select Department --</option>
-<option value="OPS">OPS</option>
-<option value="CS">CS</option>
-<option value="IT">IT</option>
-<option value="SEC">SEC</option>
+<option value="OPS">Operations</option>
+<option value="CS">Customer Services</option>
+<option value="SAL">Sales</option>
+<option value="IT">Information Technology</option>
+<option value="SEC">Security</option>
 </select>
 
 <select class="form-select mb-2" id="subDept">
-<option value="">-- Select Sub Department --</option>
+<option value="">-- Select Assessment Type --</option>
 </select>
 
 <button type="button" class="btn btn-primary w-100" id="startBtn">Start Quiz</button>
@@ -154,9 +155,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
     document.getElementById("functionSelect").addEventListener("change", function(){
         const sub = document.getElementById("subDept");
-        sub.innerHTML = "<option value=''>-- Select Sub Department --</option>";
+        sub.innerHTML = "<option value=''>-- Select Assessment Type --</option>";
 
-        if(["OPS","CS","SEC"].includes(this.value)){
+        if(["OPS","CS","SEC","SAL"].includes(this.value)){
             sub.innerHTML += "<option value='OPSTEST'>Operations Assessment</option>";
         }
         else if(this.value==="IT"){
