@@ -46,7 +46,7 @@ def insert():
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        sql = """INSERT INTO quizscore (REGION, LOC, EMPLCODE, NAME, FUNCTION, DATE, MARK, PERCENTAGE, QTYPE) 
+        sql = """INSERT INTO QuizMaster (REGION, LOC, EMPLCODE, NAME, FUNCTION, DATE, SCORE, PERCENTAGE, QTYPE) 
                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
         values = (reg, lo, emp, nam, fun, date, sc, per, sub)
 
@@ -78,9 +78,9 @@ def Report():
         cursor = conn.cursor()
         
         if res_type == 'All':
-            cursor.execute("SELECT * FROM quizscore")
+            cursor.execute("SELECT * FROM QuizMaster")
         else:
-            cursor.execute("SELECT * FROM quizscore WHERE qtype=%s", (res_type,))
+            cursor.execute("SELECT * FROM QuizMaster WHERE qtype=%s", (res_type,))
 
         data = cursor.fetchall()
         cursor.close()
