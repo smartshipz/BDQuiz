@@ -1,42 +1,34 @@
-from flask import Flask, request, render_template ,redirect,url_for
-import psycopg2
 import os
+import psycopg2
+from flask import Flask, request, render_template, redirect, url_for, jsonify
+from dotenv import load_dotenv
+
+# Load .env file for local development
+load_dotenv()
 
 app = Flask(__name__)
 
-#Supabase Database Connection
+# Secure Supabase Connection using a single URI
 def get_db_connection():
-
-    return psycopg2.connect(
-        host=os.getenv("db.mmviznnkehyjfcwauzum.supabase.co"),
-        database=os.getenv("postgres"),
-        user=os.getenv("postgres"),
-        password=os.getenv("Godisgood@llthetime"),
-        port="5432",
-        sslmode="require"
-    )
+    # In Render, you will set this Key as 'DATABASE_URL'
+    connection_uri = os.environ.get("DATABASE_URL")
+    if not connection_uri:
+        raise ValueError("No DATABASE_URL found in environment variables")
     
-    '''return psycopg2.connect(
-        host="db.mmviznnkehyjfcwauzum.supabase.co",
-        database="postgres",
-        user="postgres",
-        password="Godisgood@llthetime",
-        port="5432"
-    )'''
-
+    # Supabase requires sslmode='require' for external connections
+    return psycopg2.connect(connection_uri, sslmode="require")
 
 @app.route('/')
 def home():
-    return render_template('index.html')  # Your quiz HTML file
+    return render_template('index.html')
 
 @app.route('/insert', methods=['POST'])
 def insert():
     data = request.get_json()
-    print("Received JSON:", data)  # DEBUG: check what is received
-
     if not data:
-        return {"status": "error", "message": "No data received"}, 400
+        return jsonify({"status": "error", "message": "No data received"}), 400
 
+    # Extracting values from JSON
     reg = data.get('region')
     lo = data.get('location')
     emp = data.get('empCode')
@@ -44,62 +36,62 @@ def insert():
     fun = data.get('function')
     sub = data.get('subDepartment')
     date = data.get('date')
-    sc = data.get('score')
+    sc = data.get('score', 0)
     total = data.get('total', 0)
 
-    per = (sc / total * 100) if total else 0
+    per = (sc / total * 100) if total > 0 else 0
     
-    conn = get_db_connection()
-    cursor = conn.cursor()
-
-    sql = "INSERT INTO quizscore (REGION, LOC, EMPLCODE,NAME, FUNCTION, DATE, MARK,PERCENTAGE,QTYPE) VALUES (%s, %s, %s, %s, %s, %s,%s,%s,%s)"
-    values = (reg, lo, emp,nam, fun, date, sc,per,sub)
-
+    conn = None
     try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        sql = """INSERT INTO quizscore (REGION, LOC, EMPLCODE, NAME, FUNCTION, DATE, MARK, PERCENTAGE, QTYPE) 
+                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        values = (reg, lo, emp, nam, fun, date, sc, per, sub)
+
         cursor.execute(sql, values)
         conn.commit()
-        return {"status": "success"}
-       # print("Insert successful")  # DEBUG
-        #response = {"status": "success", "message": "Data inserted"}
+        cursor.close()
+        return jsonify({"status": "success", "message": "Data inserted successfully"})
     except Exception as e:
-        conn.rollback()
-        return {"status": "error", "message": str(e)}
-        #print(f"Error inserting data: {e}")
-        #response = {"status": "error", "message": str(e)}
+        if conn:
+            conn.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 500
     finally:
-       cursor.close()
-       conn.close()
-
-    return response
-
+        if conn:
+            conn.close()
 
 @app.route("/Result", methods=["GET", "POST"])
 def Result():
-     if request.method == "POST":
+    if request.method == "POST":
         selected_value = request.form.get("ResType")
-        print(selected_value)
         return redirect(url_for('Report', res_type=selected_value))
-
-     return render_template('Result.html')
+    return render_template('Result.html')
 
 @app.route('/Report')
 def Report():
-    res_type = request.args.get('res_type')
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    if res_type == 'All':
-        cursor.execute("SELECT * FROM quizscore")
-    elif res_type in ['OPSTEST', 'ITTEST']:
-        cursor.execute("SELECT * FROM quizscore WHERE qtype=%s", (res_type,))
-    else:
-        return "Invalid filter", 400
+    res_type = request.args.get('res_type', 'All')
+    conn = None
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        if res_type == 'All':
+            cursor.execute("SELECT * FROM quizscore")
+        else:
+            cursor.execute("SELECT * FROM quizscore WHERE qtype=%s", (res_type,))
 
-    data = cursor.fetchall()
+        data = cursor.fetchall()
+        cursor.close()
+        return render_template("Report.html", students=data)
+    except Exception as e:
+        return f"Database Error: {str(e)}", 500
+    finally:
+        if conn:
+            conn.close()
 
-    cursor.close()
-    conn.close()
-
-    return render_template("Report.html", students=data)
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    # Bind to 0.0.0.0 and use Render's PORT or default to 5001
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host='0.0.0.0', port=port)
