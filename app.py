@@ -41,7 +41,6 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('login'))
 
-
 @app.route('/insert', methods=['POST'])
 def insert():
     data = request.get_json()
@@ -84,7 +83,7 @@ def insert():
 
 @app.route("/Result", methods=["GET", "POST"])
 def Result():
-   if not session.get('logged_in'):
+    if not session.get('logged_in'):
         return redirect(url_for('login'))
     
     if request.method == "POST":
