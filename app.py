@@ -8,6 +8,9 @@ load_dotenv()
 
 app = Flask(__name__)
 
+app.secret_key = 'Bluedart'
+ADMIN_PASSWORD = "Render@2026"
+
 # Secure Supabase Connection using a single URI
 def get_db_connection():
     # In Render, you will set this Key as 'DATABASE_URL'
@@ -21,6 +24,23 @@ def get_db_connection():
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['password'] == ADMIN_PASSWORD:
+            session['logged_in'] = True
+            return redirect(url_for('Result'))
+        else:
+            error = 'Invalid Password. Please try again.'
+    return render_template('login.html', error=error)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
 
 @app.route('/insert', methods=['POST'])
 def insert():
@@ -64,6 +84,9 @@ def insert():
 
 @app.route("/Result", methods=["GET", "POST"])
 def Result():
+   if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    
     if request.method == "POST":
         selected_value = request.form.get("ResType")
         return redirect(url_for('Report', res_type=selected_value))
@@ -71,6 +94,9 @@ def Result():
 
 @app.route('/Report')
 def Report():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+ 
     res_type = request.args.get('res_type', 'All')
     conn = None
     try:
