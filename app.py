@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from flask import Flask, request, render_template, redirect, url_for, jsonify
+from flask import Flask, request, render_template, redirect, url_for, jsonify,session
 from dotenv import load_dotenv
 
 # Load .env file for local development
