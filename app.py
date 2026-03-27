@@ -13,7 +13,7 @@ ADMIN_PASSWORD = "Render@2026"
 
 # Secure Supabase Connection using a single URI
 def get_db_connection():
-    # In Render, you will set this Key as 'DATABASE_URL'
+    # In Render, set this Key as 'DATABASE_URL'
     connection_uri = os.environ.get("DATABASE_URL")
     if not connection_uri:
         raise ValueError("No DATABASE_URL found in environment variables")
