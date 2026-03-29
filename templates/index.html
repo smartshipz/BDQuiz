@@ -3,82 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Quiz App</title>
+<link href="https://fonts.googleapis.com" rel="stylesheet">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-   :root {
-        --primary-color: #2c3e50;
-        --secondary-color: #34495e;
-        --accent-color: #3498db;
-        --bg-light: #f8f9fa;
-    }
-
-    body { 
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .quiz-container {
-        max-width: 700px;
-        margin: 50px auto;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 40px;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        border: 1px solid rgba(255,255,255,0.3);
-    }
-
-    h3 { 
-        color: var(--primary-color);
-        font-weight: 700;
-        letter-spacing: -0.5px;
-    }
-
-    .form-control, .form-select {
-        border-radius: 8px;
-        padding: 12px;
-        border: 1px solid #dee2e6;
-        transition: all 0.3s ease;
-    }
-
-    .form-control:focus, .form-select:focus {
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        border-color: var(--accent-color);
-    }
-
-    .btn-primary {
-        background-color: var(--accent-color);
-        border: none;
-        padding: 12px;
-        font-weight: 600;
-        border-radius: 8px;
-        transition: transform 0.2s;
-    }
-
-    .btn-primary:hover {
-        background-color: #2980b9;
-        transform: translateY(-1px);
-    }
-
-    .option-btn {
-        width: 100%;
-        text-align: left;
-        padding: 15px 20px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        border: 2px solid #e9ecef;
-        background: white;
-        transition: all 0.2s ease;
-    }
-
-    .option-btn:hover {
-        border-color: var(--accent-color);
-        background-color: #ebf5fb;
-        color: var(--accent-color);
-    }
-
+   :root{--primary:#003366;--accent:#ffcc00;--text-main:#1e293b;--text-muted:#64748b;--border:#e2e8f0;--bg:#f8fafc}body{font-family:Inter,sans-serif;background-color:var(--bg);color:var(--text-main);margin:0;display:flex;justify-content:center;padding:40px 20px}.quiz-container{width:100%;background:#fff;padding:40px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);border-top:6px solid var(--primary)}h2,h3{margin:0;font-size:1.5rem;color:var(--primary);font-weight:700}header{margin-bottom:32px}.subtitle{font-size:.9rem;color:var(--text-muted);margin-top:4px}.form-control,.form-select{border-radius:8px;padding:12px;border:1px solid #dee2e6;transition:.3s}.form-control:focus,.form-select:focus{box-shadow:0 0 0 3px rgba(52,152,219,.2);border-color:var(--accent-color)}.btn-primary{width:100%;background-color:var(--primary);color:#fff;padding:14px;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer;transition:background .3s,transform .1s;margin-top:10px}.btn-primary:active{transform:scale(.99)}.btn-primary:hover{background-color:#024;transform:translateY(-1px)}.option-btn{width:100%;text-align:left;padding:15px 20px;margin-bottom:10px;border-radius:10px;border:2px solid #e9ecef;background:#fff;transition:.2s}.option-btn:hover{border-color:var(--accent-color);background-color:#ebf5fb;color:var(--accent-color)}.row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
 </style>
 </head>
 
@@ -88,12 +18,15 @@
 
 <!-- FORM -->
 <div class="quiz-container" id="formSection">
-<h3 class="text-center mb-3">Employee Quiz</h3>
+<header>
+    <h2>InfoSec Proficiency Assessment:</h2>
+    <p class="subtitle">"Your awareness is our strongest firewall; stay sharp, stay secure."</p>
+  </header>
 
 <div class="row">
 
 <select class="form-select mb-2" id="region">
-<option value="">-- Select Region --</option>
+<option value="">--Select Region--</option>
 <option value="EAST">EAST</option>
 <option value="NORTH">NORTH</option>
 <option value="SOUTH">SOUTH</option>
@@ -105,20 +38,20 @@
 <input class="form-control mb-2" id="location" placeholder="Location">
 <input class="form-control mb-2" id="empCode" placeholder="Employee Code">
 <input class="form-control mb-2" id="name" placeholder="Name">
-</div>
 
 <select class="form-select mb-2" id="functionSelect">
-<option value="">-- Select Department --</option>
+<option value="">---Select Department---</option>
 <option value="OPS">Operations</option>
-<option value="CS">Customer Services</option>
 <option value="SAL">Sales</option>
+<option value="CS">Customer Service</option>
 <option value="IT">Information Technology</option>
 <option value="SEC">Security</option>
 </select>
 
 <select class="form-select mb-2" id="subDept">
-<option value="">-- Select Assessment Type --</option>
+<option value="">-- Choose Assessment Type --</option>
 </select>
+</div>
 
 <button type="button" class="btn btn-primary w-100" id="startBtn">Start Quiz</button>
 </div>
@@ -137,192 +70,12 @@
 <p id="insertStatus"></p>
 </div>
 
+
 </div>
 
 <script>
 
-// GLOBAL
-let questions = [];
-let currentQ = 0;
-let score = 0;
-let userData = {};
-const today = new Date().toISOString().split('T')[0];
-
-// READY
-document.addEventListener("DOMContentLoaded", function(){
-
-    document.getElementById("startBtn").addEventListener("click", startQuiz);
-
-    document.getElementById("functionSelect").addEventListener("change", function(){
-        const sub = document.getElementById("subDept");
-        sub.innerHTML = "<option value=''>-- Select Assessment Type --</option>";
-
-        if(["OPS","CS","SEC","SAL"].includes(this.value)){
-            sub.innerHTML += "<option value='OPSTEST'>Operations Assessment</option>";
-        }
-        else if(this.value==="IT"){
-            sub.innerHTML += "<option value='ITTEST'>IT Assessment</option>";
-        }
-    });
-
-});
-
-// START
-function startQuiz(){
-
-    currentQ = 0;
-    score = 0;
-
-    userData = {
-        region: document.getElementById("region").value,
-        location: document.getElementById("location").value,
-        empCode: document.getElementById("empCode").value,
-        name: document.getElementById("name").value,
-        function: document.getElementById("functionSelect").value,
-        subDepartment: document.getElementById("subDept").value,
-        date: today
-    };
-
-    if(!userData.name || !userData.empCode || !userData.region || !userData.function || !userData.subDepartment){
-        alert("Fill all required fields");
-        return;
-    }
-
-    // QUESTIONS LOGIC
-    if(userData.subDepartment === "OPSTEST"){
-        questions = [
-    {"q": "Customer cannot Track awb status in website without login", "options": ["True", "False"], "answer": 1},
-    {"q": "Field in-scan of shipments can be done from office", "options": ["True", "False"], "answer": 1},
-    {"q": "Rejected AWB while In-scan can be returned back to:", "options": ["To Shipper", "Cs In-Charge", "Info IT In-Charge and get data for further process"], "answer": 2},
-    {"q": "Delivery of OTP enabled shipments needs to be delivered only with OTP", "options": ["True", "False"], "answer": 0},
-    {"q": "Delivery Status of the shipment via OTM to be updated", "options": ["From Field", "From Office", "From Home"], "answer": 0},
-    {"q": "For Booking International shipments, Consignee address book needs to be updated (Mandatory)", "options": ["True", "False"], "answer": 0},
-    {"q": "Digital payments while delivery is prohibited", "options": ["True", "False"], "answer": 1},
-    {"q": "Shipping data of Customer is available for last 90 days only", "options": ["True", "False"], "answer": 0},
-    {"q": "I can save critical data in the local hard disk of the pc", "options": ["True", "False"], "answer": 1},
-    {"q": "Bulk status update in OTM devices, sync not happening, how to prevent this?", "options": ["Keep Restarting the Device", "Call IT Person", "Do Manual sync at Regular Intervals"], "answer": 2},
-    {"q": "Delivered Shipments Status not Syncing with C2NG, what to do?", "options": ["Do manual status update", "Share backup file to IT person", "Redo the process"], "answer": 1},
-    {"q": "EMAIL received from suspicious ID asking to click URL & forward same", "options": ["Do as said in Mail", "Immediately delete mail & report to IT", "Take no action"], "answer": 1},
-    {"q": "In BlueDart, Teams Chat History remains for how many days?", "options": ["30 Days", "180 Days", "90 Days", "None of the above"], "answer": 1},
-    {"q": "Which of the following is NOT allowed as per IT policy?", "options": ["Using Guest Wi-Fi for external laptops", "Saving critical data on local hard disk", "Accessing C2NG portal with 2FA", "Using Microsoft Edge for enterprise portal"], "answer": 1},
-    {"q": "What is the correct way to handle OTP-enabled deliveries?", "options": ["Deliver without OTP if customer requests", "Deliver only after OTP verification", "Call IT for OTP bypass", "Use any random OTP"], "answer": 1},
-    {"q": "What should you do if BYOD device fails to send OTP to customer?", "options": ["Change mobile immediately", "Check network of delivery staff & customer", "Ignore and deliver without OTP", "Reset the app without informing IT"], "answer": 1},
-    {"q": "If you receive an email asking for your login credentials, what is the correct action?", "options": ["Reply with your credentials", "Report the email to IT immediately", "Forward the email to colleagues", "Click the link to verify"], "answer": 1},
-    {"q": "Sharing your password with your boss or colleagues is:", "options": ["Allowed in emergencies", "Strictly prohibited", "Allowed if approved by IT", "Allowed for faster work"], "answer": 1}
-];
-    } else {
-        questions = [
-    {"q": "What is ISAT", "options": ["Information System Awareness Training", "Information Security Awareness Training", "Information Security Awareness Technology"], "answer": 1},
-    {"q": "Password Management", "options": ["Do Not Record password on Paper", "Never Share your password", "At least 15 characters long", "All The Above"], "answer": 3},
-    {"q": "Allowing unauthorized personnel to access the system", "options": ["Yes, it’s a Business Need", "No, don’t Allow unauthorised personnel"], "answer": 1},
-    {"q": "Email Attachments – Best Practices", "options": ["Avoid unknown senders", "Do not respond to unauthorized info requests", "Delete junk/phishing and inform IT", "All the Above"], "answer": 3},
-    {"q": "We can connect pen drive / Mobile in office pc", "options": ["Yes", "No. don't connect such devices"], "answer": 1},
-    {"q": "What is BCP", "options": ["Business Continuity Plan", "Business Computer policy", "Business compliance policy"], "answer": 0},
-    {"q": "Customer Data Handling", "options": ["Store for 1 month", "Keep in Onedrive", "Store in mail folder", "Delete immediately after processing"], "answer": 3},
-    {"q": "What is DPP", "options": ["Data Privacy Policy", "Data Private Policy", "Data Protection Policy"], "answer": 2},
-    {"q": "Who must adhere to Data Privacy Policy?", "options": ["All employees, vendors, partners", "Only BD Employee", "Applicable only for IT Employee"], "answer": 0},
-    {"q": "Personal data should only be collected for", "options": ["Business Purpose", "Personal use"], "answer": 0},
-    {"q": "Policy regarding external laptops?", "options": ["Connect after approval", "Strictly prohibited; Guest network only", "Connect if antivirus installed", "No restriction"], "answer": 1},
-    {"q": "Requirements for C2NG / Enterprise Portal via internet?", "options": ["No authentication", "MFA, Win 10+, Edge/Chrome", "Internal network only", "VPN only"], "answer": 1},
-    {"q": "Mailbox size for O365 license types?", "options": ["E3 – 99 GB; F3R+ – 2 GB", "E3 – 50 GB; F3R+ – 10 GB", "Both 99 GB", "E3 – Unlimited; F3R+ – 2 GB"], "answer": 0},
-    {"q": "Who cascades approved scope to RSA and RITH?", "options": ["CISSO", "Head-IT", "AISA", "RSA"], "answer": 2},
-    {"q": "Who recommends RSA appointment to AISA?", "options": ["CISSO", "RITH", "Head-IT", "SA"], "answer": 1},
-    {"q": "Who decides the audit team to visit locations?", "options": ["AISA only", "RSA/RITH", "CISSO", "SA"], "answer": 1},
-    {"q": "Location with >3 severe non-compliances audited by:", "options": ["SA only", "CISSO and Head-IT", "RSA/RITH", "AISA only"], "answer": 3},
-    {"q": "Key independence requirement for Security Auditors?", "options": ["Same department", "Nominated by users", "No responsibility for audited area", "Report to Head-IT"], "answer": 2},
-    {"q": "Who forwards audit schedule to SAs?", "options": ["AISA", "RSA", "RITH", "CISSO"], "answer": 1},
-    {"q": "Approval workflow for Security Auditors?", "options": ["AISA selects directly", "RSA recommends; RITH/AISA approve", "CISSO appoints", "SA appoints themselves"], "answer": 1},
-    {"q": "Role of AISA in audit process?", "options": ["Field audits", "Approves scope and appointments", "Manages ESP module", "Reports non-compliance"], "answer": 1},
-    {"q": "Tool referenced for audit scheduling?", "options": ["Online Tracker", "ESP Audit module", "Risk Register", "GRC Dashboard"], "answer": 1},
-    {"q": "Primary purpose of APIGEE?", "options": ["Invoices", "Secure API integration", "Physical shipments", "Customer IDs"], "answer": 1},
-    {"q": "Blue Dart APIs use REST and HTTPS?", "options": ["TRUE", "FALSE"], "answer": 0},
-    {"q": "Role of SaaS providers in logistics?", "options": ["Hardware", "Plug-ins and pre-integrated APIs", "Replace tracking", "Manual entry"], "answer": 1},
-    {"q": "NOT an e-store platform mentioned?", "options": ["Shopify", "Magento", "WooCommerce", "Oracle ERP"], "answer": 3},
-    {"q": "Protects data from unauthorized access?", "options": ["Formatting", "Encryption", "Copy-paste", "Zoom"], "answer": 1},
-    {"q": "Use of cloud storage?", "options": ["Offline programs", "Physical drives only", "Access over internet", "Printing"], "answer": 2},
-    {"q": "What does API stand for?", "options": ["Application Programming Interface", "Advanced Programming Interface", "Application Programming Integration", "Automated Program Interface"], "answer": 0},
-    {"q": "What does REST stand for?", "options": ["Remote Execution", "Representational State Transfer", "Reliable State Transfer", "Resource Technology"], "answer": 1},
-    {"q": "Data format most used in APIs?", "options": ["XML", "CSV", "JSON", "HTML"], "answer": 2},
-    {"q": "What is an API endpoint?", "options": ["Server", "User interface", "Specific URL for requests", "Language"], "answer": 2},
-    {"q": "Common API authentication method?", "options": ["CAPTCHA", "API Key", "HTML Form", "CSS Token"], "answer": 1},
-    {"q": "Status code for 'Unauthorized'?", "options": ["200", "400", "401", "403"], "answer": 2},
-    {"q": "What does HTTPS provide in APIs?", "options": ["Speed", "Encryption and security", "Payload", "UI support"], "answer": 1},
-    {"q": "What is API documentation used for?", "options": ["Auto-code", "Explaining how to use API", "Hosting", "Performance"], "answer": 1},
-    {"q": "Upload soft data to portal AND share as mail attachment?", "options": ["TRUE", "FALSE"], "answer": 1}
-];
-    }
-
-    document.getElementById("formSection").classList.add("d-none");
-    document.getElementById("quizSection").classList.remove("d-none");
-
-    loadQuestion();
-}
-
-// LOAD
-function loadQuestion(){
-    const q = questions[currentQ];
-
-    document.getElementById("question").innerText = `Q${currentQ+1}. ${q.q}`;
-
-    const ansDiv = document.getElementById("answers");
-    ansDiv.innerHTML = "";
-
-    q.options.forEach((opt,i)=>{
-        const btn = document.createElement("button");
-        btn.innerText = opt;
-        btn.className = "btn btn-outline-primary option-btn";
-        btn.onclick = ()=>checkAnswer(i);
-        ansDiv.appendChild(btn);
-    });
-}
-
-// CHECK
-function checkAnswer(selected){
-
-    const btns = document.querySelectorAll(".option-btn");
-
-    btns.forEach((b,i)=>{
-        if(i===questions[currentQ].answer) b.classList.add("btn-success");
-        else if(i===selected) b.classList.add("btn-danger");
-        b.disabled=true;
-    });
-
-    if(selected===questions[currentQ].answer) score++;
-
-    currentQ++;
-
-    setTimeout(()=>{
-        if(currentQ < questions.length) loadQuestion();
-        else showResult();
-    },10);
-}
-
-// RESULT
-function showResult(){
-
-    document.getElementById("quizSection").classList.add("d-none");
-    document.getElementById("resultSection").classList.remove("d-none");
-
-    document.getElementById("userDetails").innerText =
-        `Name: ${userData.name} | Emp: ${userData.empCode} | Dept: ${userData.function} | Sub: ${userData.subDepartment}`;
-
-    document.getElementById("scoreText").innerText =
-        `Score: ${score} / ${questions.length}`;
-
-    fetch('/insert',{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({...userData, score, total:questions.length})
-    })
-    .then(res=>res.json())
-    .then(d=>{
-        document.getElementById("insertStatus").innerText = "DB: " + d.message;
-    })
-    .catch(()=>{
-        document.getElementById("insertStatus").innerText = "DB Error";
-    });
-}
-
+const _0xac80e6=_0x5ebe;(function(_0x49c699,_0x347cb5){const _0x11ffbc=_0x5ebe,_0x9d2955=_0x49c699();while(!![]){try{const _0x4a6078=-parseInt(_0x11ffbc(0x2ad))/(0x1c77+0x169*0x13+0x3741*-0x1)*(parseInt(_0x11ffbc(0x20c))/(-0xcb3*-0x1+-0x12e9+0xc7*0x8))+-parseInt(_0x11ffbc(0x491))/(0x35b*0x1+-0x18b9+0x1561)+parseInt(_0x11ffbc(0x387))/(0x3*0xcc9+-0x1786+-0x1*0xed1)+-parseInt(_0x11ffbc(0x1e4))/(0x1e50+0x19*0x1+-0x185*0x14)+-parseInt(_0x11ffbc(0x4b8))/(-0x7a7*-0x1+-0x2035+-0x11e*-0x16)+parseInt(_0x11ffbc(0x22c))/(-0x24ef+0xfcf*0x1+-0x39*-0x5f)+parseInt(_0x11ffbc(0x357))/(-0x1*-0x1edf+-0x1f92+-0x11*-0xb);if(_0x4a6078===_0x347cb5)break;else _0x9d2955['push'](_0x9d2955['shift']());}catch(_0x368a8f){_0x9d2955['push'](_0x9d2955['shift']());}}}(_0x28be,-0x4c*0xa1b+-0x2*0x510ca+-0x1*-0x126f9e));let questions=[],currentQ=-0x1*-0xb29+-0x28a+0x1*-0x89f,score=-0x851+-0x4f8+-0xd49*-0x1,userData={};const today=new Date()[_0xac80e6(0x355)+'g']()[_0xac80e6(0x408)]('T')[-0x3b9*0x3+0xdea*-0x1+0x1915*0x1];document[_0xac80e6(0x1b8)+_0xac80e6(0x361)](_0xac80e6(0x358)+_0xac80e6(0x266),function(){const _0x4b65d5=_0xac80e6,_0x18266d={'QSsVY':_0x4b65d5(0x366),'gTmyI':_0x4b65d5(0x245)+_0x4b65d5(0x37e)+_0x4b65d5(0x4d7)+_0x4b65d5(0x26c)+_0x4b65d5(0x182)+'n>','yoAxf':_0x4b65d5(0x42d),'kgdzE':_0x4b65d5(0x26f),'TWjUx':_0x4b65d5(0x45e),'TjGJZ':_0x4b65d5(0x245)+_0x4b65d5(0x330)+_0x4b65d5(0x1b1)+_0x4b65d5(0x46a)+_0x4b65d5(0x4df)+_0x4b65d5(0x400),'VMTqI':function(_0x528c3f,_0x2cb422){return _0x528c3f===_0x2cb422;},'Oqslw':_0x4b65d5(0x245)+_0x4b65d5(0x276)+_0x4b65d5(0x2d5)+_0x4b65d5(0x2d7)+_0x4b65d5(0x301),'bjNxQ':_0x4b65d5(0x4e6),'usBeO':_0x4b65d5(0x487),'vtRHS':_0x4b65d5(0x339)+_0x4b65d5(0x25f),'HRkci':_0x4b65d5(0x318)};document[_0x4b65d5(0x4c9)+_0x4b65d5(0x3fd)](_0x18266d[_0x4b65d5(0x3fb)])[_0x4b65d5(0x1b8)+_0x4b65d5(0x361)](_0x18266d[_0x4b65d5(0x40d)],startQuiz),document[_0x4b65d5(0x4c9)+_0x4b65d5(0x3fd)](_0x18266d[_0x4b65d5(0x2ac)])[_0x4b65d5(0x1b8)+_0x4b65d5(0x361)](_0x18266d[_0x4b65d5(0x36f)],function(){const _0x5af508=_0x4b65d5,_0x46f971=document[_0x5af508(0x4c9)+_0x5af508(0x3fd)](_0x18266d[_0x5af508(0x228)]);_0x46f971[_0x5af508(0x3f2)]=_0x18266d[_0x5af508(0x29d)];if([_0x18266d[_0x5af508(0x19e)],'CS',_0x18266d[_0x5af508(0x2c6)],_0x18266d[_0x5af508(0x372)]][_0x5af508(0x3bc)](this[_0x5af508(0x4c5)]))_0x46f971[_0x5af508(0x3f2)]+=_0x18266d[_0x5af508(0x39b)];else _0x18266d[_0x5af508(0x2b2)](this[_0x5af508(0x4c5)],'IT')&&(_0x46f971[_0x5af508(0x3f2)]+=_0x18266d[_0x5af508(0x34b)]);});});function _0x5ebe(_0xab0454,_0xbaf04d){_0xab0454=_0xab0454-(-0xcb+-0x1*-0x195b+-0x1755);const _0x35668b=_0x28be();let _0x2ce5ec=_0x35668b[_0xab0454];return _0x2ce5ec;}function _0x28be(){const _0x25d181=['rGUGq','RgRxS','Keep\x20Resta','WIjou','IT\x20Employe','ds\x20audit\x20s','s\x20the\x20audi','\x20/\x20','MiLhw','SAL','ndence\x20req','NGatj','pments\x20can','Internal\x20n','EoBcO','\x20share\x20as\x20','ately','Plan','cy\x20Policy','tJdgH','t\x20process?','ions\x20Asses','licy?','colleagues','stics?','arding\x20ext','HpRfQ','audited\x20by','s\x20update\x20i','connect\x20su','r\x20external','UmEgJ','ud\x20storage','ion','Bnqal','dle\x20OTP-en','r\x20OTP\x20bypa','\x20is:','Shopify','Manual\x20ent','OfZrk','n\x20System\x20A','ndom\x20OTP','tment','All\x20the\x20Ab','nwrqa','qvWLQ','glhKA','\x20per\x20IT\x20po','ZrXOR','click','ograms','Yes','licy','iNUNp','QPHFf','tazRg','a\x20Business','qsHml','tely','1793358oYNrJP','GNxns','ned?','rvals','Zaxio','nauthorize','CISSO\x20appo','remove','hLWOl','\x20approved\x20',';\x20F3R+\x20–\x202','YxAmF','.option-bt','Auto-code','Never\x20Shar','Nominated\x20','json','PTHxn','\x20API\x20endpo','Field\x20audi','KBWeN','DGJnp','t\x20Wi-Fi\x20fo','function','ontinuity\x20','what\x20to\x20do','eiyhA','\x20authentic','All\x20employ','\x20|\x20Emp:\x20','CAPTCHA','Approval\x20w','Allowing\x20u','ezost','90\x20Days','he\x20followi','1\x20month',';\x20F3R+\x20–\x201','HTTPS\x20prov','3465018ZPIUPt','EhqeF','\x20days\x20only','ted','bWNHA','Risk\x20Regis','WooCommerc','Oracle\x20ERP','Status\x20not','dHnlD','Offline\x20pr','l\x20with\x202FA','JJOVj','value','WHMgp','rohibited;','mpliances\x20','getElement','oBIAH','vriNI','Email\x20Atta','Approves\x20s','Specific\x20U','MVNWY','nfaZB','ate','Hardware','QmyaF','LElVE','OaqKJ','Business\x20C','hoose\x20Asse','gTYoN','vered\x20only','Business\x20c','Invoices','GeEsL','allowed\x20as','nts\x20needs\x20','sment</opt','UowbF','ent','\x20with\x20OTP','o\x20prevent\x20','REST\x20stand','xCudZ','startBtn','bYOFt','Policy\x20reg','gular\x20Inte','aoAoh','yBVlG','\x20email\x20to\x20','n/json','ZFDpI','r\x20faster\x20w','by\x20users','FKIuD','Zoom','rogramming','r\x20internet','False','eADNC','NoLvG','Who\x20must\x20a','ile\x20immedi','TRUE','GRC\x20Dashbo','ests','SA\x20only','ard\x20same','forEach','\x20IT\x20person','Sharing\x20yo','Avoid\x20unkn','g\x20IT','BRflm','aKHcx','RDKHx','or\x20Securit','\x20laptops','d-none','No\x20authent','ugDJA','SA\x20in\x20audi','to\x20be\x20upda','by\x20IT','r\x20requests','\x20SAs?','Delivery\x20S','k\x20awb\x20stat','e\x20for\x20\x27Una','ional\x20ship','ersonnel','nect\x20pen\x20d','IrqWB','tions?','button','ress\x20book\x20','led\x20shipme','30\x20Days','app\x20withou','PkKVQ','pPbnU','needs\x20to\x20b','pcESu','5\x20license\x20','Delivery\x20o','KOOGQ','jNwpu','ide\x20in\x20API','Secure\x20API','mer?','180\x20Days','pond\x20to\x20un','ployee','Replace\x20tr','y\x20Policy?','ail\x20folder','None\x20of\x20th','stMuj','\x20Guest\x20net','IT\x20immedia','I\x20can\x20save','he\x20shipmen','JSON','ompliance\x20','ited;\x20F3R+','y\x20Auditors','\x20antivirus','ata\x20from\x20u','yments\x20whi','CoUYy','e--</optio','\x20|\x20Sub:\x20','From\x20Offic','ends\x20RSA\x20a','t,\x20Teams\x20C','Role\x20of\x20Sa','d\x20in\x20APIs?','VDSHE','xgnFz','ddEvv','btn-succes','g\x20Internat','hat\x20is\x20the','ail\x20asking','KdKip','RITH','ata\x20of\x20Cus','length','FsgfF','s\x20the\x20syst','\x20only\x20for\x20','Requiremen','Wkswb','Call\x20IT\x20fo','aaNOM','btn-danger','ard','From\x20Home','yoAxf','r\x20boss\x20or\x20','answer','SXlSM','f\x20OTP\x20enab','xxDDL','hat\x20Histor','GopuF','Copy-paste','RSA/RITH','mCFin','module','for\x20how\x20ma','ord\x20passwo','ter','Data\x20forma','yYven','Physical\x20s','portal\x20AND','ST\x27>Operat','eTskK','btn\x20btn-ou','rs,\x20partne','Password\x20M','wSNeZ','Best\x20Pract','addEventLi','Do\x20as\x20said','jebrV','Hosting','te\x20Transfe','t\x20most\x20use','ation\x20used','Strictly\x20p','Performanc','vywMc','ith\x20C2NG,\x20','tion','chedule\x20to','XML','waCne','veries?','cope\x20and\x20a','Encryption','d\x20get\x20data','EMAIL\x20rece','OrrAU','ork','ze\x20for\x20O36','APIs\x20use\x20R','t\x20team\x20to\x20','sKgYq','Bulk\x20statu','ice\x20fails\x20','slkdH','olcZV','\x20and\x20infor','e\x20correct\x20','\x20on\x20local\x20','rt\x20to\x20IT','bNpeA','Using\x20Micr','\x20–\x202\x20GB','suspicious','region','acking','entials,\x20w','orm\x20mentio','d\x20personne','ing\x20Interf','2798190KRkdak','ices','qZEJf','own\x20sender','Who\x20cascad','authorized','VRrAy','\x20correct\x20a','taNAk','\x20Technolog','No\x20restric','aUdbM','enced\x20for\x20','rpose\x20of\x20A','onclick','rd\x20on\x20Pape','hipments','t\x20informin','woiAh','hrome','e\x20above','\x20Auditors?','int?','Store\x20in\x20m','Yes,\x20it’s\x20','True','WlPKT','ata\x20Handli','400','Cs\x20In-Char','\x20for\x20enter','tmfQm','sync\x20at\x20Re','n\x20Security','cution','ZIKnd','jjsBp','ived\x20from\x20','entials','\x20how\x20to\x20us','3644alrSfQ','DHTsh','What\x20does\x20','Immediatel','hSYHI','\x20integrati','ZXzCt','MFA,\x20Win\x201','VPN\x20only','ItPtH','RyQvj','MHtNH','C2NG\x20porta','m\x20IT','\x20ID\x20asking','ction?','rting\x20the\x20','What\x20is\x20th','le\x20deliver','ssing','Do\x20Manual\x20','ITH?','ops?','What\x20shoul','jsHbr','No\x20respons','ends;\x20RITH','signee\x20add','QSsVY','\x20and\x20secur','area','vREDR','2998646OTcPGw','-btn','torAll','rs\x20long','fter\x20proce','ZHMmF','\x20your\x20cred','uDzLD','eapYN','ace','Allowed\x20in','\x20info\x20requ','thout\x20OTP\x20','Report\x20to\x20','tical\x20data','iNety','ernal\x20lapt','Language','Applicatio','mmWlq','not\x20happen','SUYnj','Who\x20decide','iXzdk','Plug-ins\x20a','<option\x20va','jNuNe','rs\x20in\x20logi','thorised\x20p','od?','querySelec','jVkId','Personal\x20d','audit\x20sche','lqFDz','\x20for\x20furth','Do\x20manual\x20','No.\x20don\x27t\x20','Speed','es\x20approve','r\x20Security','xPMNF','pEBxb','Role\x20of\x20AI','orkflow\x20fo','Device','way\x20to\x20han','hrvBo','RETID','wareness\x20T','uests','lect','(Mandatory','e\x20your\x20pas','P\x20module','bzGDC','Protects\x20d','Printing','Loaded','Saving\x20cri','dZnIk','tional\x20Sta','Advanced\x20P','\x20Syncing\x20w','ssment\x20Typ','Do\x20not\x20res','nBusD','SEC','Use\x20of\x20clo','this?','E3\x20–\x20Unlim','LYJIL','appendChil','tomer\x20is\x20a','lue=\x27ITTES','\x20GB','qtFVi','coubI','iEnEu','ata\x20Privac','Business\x20P','If\x20you\x20rec','Access\x20ove','nzGny','Rejected\x20A','BJpDI','BvYpX','fUaav','Data\x20Priva','rocess','uxkOo','Program\x20In','JmlSM','Share\x20back','rom\x20office','1|2|4','uirement\x20f','classList','LetnO','ail\x20&\x20repo','n\x20OTM\x20devi','Deliver\x20on','work\x20only','Who\x20forwar','uthorized\x27','status\x20upd','ice\x20pc','tBSXE','ly\x20after\x20O','crZlR','bcteI','add','Allowed\x20if','gTmyI','rive\x20/\x20Mob','0+,\x20Edge/C','Report\x20the','Key\x20indepe','yXWyv','Change\x20mob','Head-IT','pfbWC','to\x20send\x20OT','ed\x20back\x20to','INkJC','\x20to\x20click\x20','n\x20Programm','Both\x2099\x20GB','vtRHS','269zmamZr','ation','thOPg','What\x20is\x20an','prise\x20port','VMTqI','HHZUo','us\x20in\x20webs','\x20|\x20Dept:\x20','\x20deliver\x20w','y\x20delete\x20m','SuRiu','ork\x20of\x20del','User\x20inter','Iwrpq','-Charge\x20an','Connect\x20if','ere\x20non-co','neTvU','xdhXy','Server','fsiPZ','WPpXs','MtNLv','CSV','kgdzE','ees,\x20vendo','rJpBx','MjkNg','EST\x20and\x20HT','ation\x20meth','\x20Need','ces,\x20sync\x20','eWXGf','GqFNd','mail\x20attac','Formatting','\x20Interface','OjfgB','OlBac','T\x27>IT\x20Asse','RSA','ssment</op','innerText','BXJBV','IfQwS','ch\x20devices','n-complian','login\x20cred','omputer\x20po','EbncH','Data\x20Prote','Automated\x20','AsMuD','ny\x20days?','ng\x20is\x20NOT\x20','Delete\x20imm','Mailbox\x20si','bMGbz','HCEFz','link\x20to\x20ve','No,\x20don’t\x20','At\x20least\x201','zlLVY','ACOkX','RuBUd','etwork\x20onl','eZELr','policy','dnlZJ','ile\x20in\x20off','VXgks','Reports\x20no','equired\x20fi','y\x20remains\x20','NmibL','OjXok','ith\x20>3\x20sev','tatus\x20of\x20t','Allow\x20unau','aS\x20provide','if\x20custome','Keep\x20in\x20On','ing,\x20how\x20t','tion>','What\x20is\x20DP','\x20the\x20pc','OudZZ','ity','E3\x20–\x2050\x20GB','ur\x20passwor','Delete\x20jun','Call\x20IT\x20Pe','401','From\x20Field','POST','d\x20access?','d\x20scope\x20to','tline-prim','egrated\x20AP','ts\x20directl','AShWN','TPS?','LZPuk','Personal\x20u','slBqD','HxUrT','change','kMNrm','stringify','OVUBl','CsXFU','FALSE','up\x20file\x20to','Primary\x20pu','hHESV','wsHfw','prdGc','e\x20email\x20to','Field\x20in-s','What\x20is\x20BC','d\x20with\x20you','In\x20BlueDar','Check\x20netw','ove','nd\x20pre-int','rnet?','CpipD','XmPSO','All\x20The\x20Ab','G\x20/\x20Enterp','lue=\x27OPSTE','mRphB','ication','Allowed\x20fo','className','MtkIk','ppointment','sword','MOhTe','functionSe','Name:\x20','mGRFQ','zpXqn','Customer\x20I','catch','name','data\x20in\x20th','HTML\x20Form','rohibited','OMdcL','Delivered\x20','Same\x20depar','ite\x20withou','Magento','TP\x20verific','ints','rson','Oqslw','kctKf','Informatio','HHfXm','Upload\x20sof','abled\x20deli','ramdd','hard\x20disk','formSectio','wSdrp','toISOStrin','URL\x20&\x20forw','17056008zNVJnO','DOMContent','CJWIL','Explaining','EIqew','XjSZE','f\x20BYOD\x20dev','PPmNg','face','nDBgS','stener','LvAQZ','cCYAZ','t\x20data\x20to\x20','QORQm','subDept','dhere\x20to\x20D','What\x20is\x20AP','disabled','TrNfF','Status\x20cod','Only\x20BD\x20Em','KXvyb','location','HRkci','scoreText','Score:\x20','TWjUx','5\x20characte','WB\x20while\x20I','te\x20Policy','\x20only\x20be\x20c','UI\x20support','ESP\x20Audit\x20','or\x20last\x2090','Forward\x20th','e\x20local\x20ha','NaARG','PrWTE','lue=\x27\x27>--C','DB\x20Error','DdpXd','MTEch','insertStat','oDsNz','eive\x20an\x20em','E3\x20–\x2099\x20GB','XLQoO','49280igkjgn','\x20to\x20AISA?','pKWJu','er\x20process','rify','d\x20you\x20do\x20i','Who\x20recomm','200','ter\x20approv','lNPka','CSS\x20Token','AISA\x20only','Customer\x20c','e\x20API','\x20for?','Blue\x20Dart\x20','Gzwly','duling?','API\x20stand\x20','y\x20is\x20prohi','TjGJZ','e\x20updated\x20','OhBws','\x20Training','VSdHU','ediately\x20a','ata\x20should','\x20critical\x20','vailable\x20f','ary\x20option','RSA\x20recomm','ZqXFK','QjuSV','Resource\x20T','EvEIn','cker','chments\x20–\x20','ZVhnP','\x20in\x20Mail','tMgZI','I\x20document','DplLj','/AISA\x20appr','RTnaw','r\x20audited\x20','CChwQ','Digital\x20pa','CISSO','OPSTEST','SA\x20appoint','Redo\x20the\x20p','elds','Ignore\x20and','includes','createElem','P\x20to\x20custo','wTYWm','Info\x20IT\x20In','pNuGq','xSNJo','Reply\x20with','AISA\x20selec','question','s\x20themselv','ction\x20Poli','types?','cANLx','annot\x20Trac','\x20RSA\x20and\x20R','t\x20via\x20OTM\x20','Reliable\x20S','tXHhI','Remote\x20Exe','ftgSm','bskyY','0\x20GB','cBoEx','answers','anagement','GISjU','/insert','ts\x20for\x20C2N','CISSO\x20and\x20','options','n-scan\x20can','HLrLU','What\x20is\x20IS','visit\x20loca','Common\x20API','Click\x20the\x20','terface','can\x20of\x20shi','Customer\x20D','rise\x20Porta','Using\x20Gues','Accessing\x20','NOT\x20an\x20e-s','nuzps','\x20Awareness','ments,\x20Con','\x20installed','ivery\x20staf','k/phishing','rd\x20disk\x20of','\x20emergenci','QXGFK','tate\x20Trans','innerHTML','xnmwY','NbDPp','applicatio','LDSpy','osoft\x20Edge','We\x20can\x20con','xOKAf','Do\x20Not\x20Rec','bjNxQ','mnYKY','ById','resultSect','then','ion>','Shipments\x20','ZmWqL','Connect\x20af','IcDQY','RTtlj','bited','Take\x20no\x20ac','split','QRyKJ','For\x20Bookin','fer','message','usBeO','OVvgb','ing\x20Integr','EDjAn','Manages\x20ES','t\x20login','edrive','\x20colleague','jbZGR','Fill\x20all\x20r','rives\x20only','l\x20to\x20acces','Physical\x20d','elTwJ','Store\x20for\x20','tore\x20platf','hment?','ibility\x20fo','djNjW','UwzZR','\x20be\x20return','wxpCG','quizSectio','IoDFG','l\x20via\x20inte','API\x20Key','MNHOz','DYPva','UTxIA','cHTOx','gRZLH','empCode','OPS','f\x20&\x20custom','PVMfU','bhDpb','403','PIGEE?','Payload','gNJVq','Online\x20Tra','to\x20be\x20deli','ollected\x20f','ithout\x20OTP','userDetail','Location\x20w','Shipping\x20d','RL\x20for\x20req','MVYfJ','DB:\x20','\x20be\x20done\x20f','To\x20Shipper','Tool\x20refer','Which\x20of\x20t','Representa','Reset\x20the\x20','\x20for\x20your\x20','urpose','VilME','raining','5|7|0|6|3|','CdCCL','echnology','subDepartm','Applicable','for?','OfiLo','Deliver\x20wi','JUsAI','HTML','Use\x20any\x20ra','AISA'];_0x28be=function(){return _0x25d181;};return _0x28be();}function startQuiz(){const _0x5a1b44=_0xac80e6,_0x52bb0f={'KBWeN':_0x5a1b44(0x449)+_0x5a1b44(0x28b),'xOKAf':_0x5a1b44(0x1de),'INkJC':_0x5a1b44(0x36e),'CoUYy':_0x5a1b44(0x42c),'GISjU':_0x5a1b44(0x33f),'OVvgb':_0x5a1b44(0x339)+_0x5a1b44(0x25f),'oDsNz':_0x5a1b44(0x366),'rJpBx':_0x5a1b44(0x353)+'n','slkdH':_0x5a1b44(0x14e),'ZrXOR':_0x5a1b44(0x423)+'n','kMNrm':function(_0x5f5c42,_0x5104b2){return _0x5f5c42===_0x5104b2;},'zpXqn':_0x5a1b44(0x3b7),'cCYAZ':_0x5a1b44(0x393)+_0x5a1b44(0x3ca)+_0x5a1b44(0x157)+_0x5a1b44(0x2b4)+_0x5a1b44(0x346)+_0x5a1b44(0x412),'HHfXm':_0x5a1b44(0x1fd),'OjXok':_0x5a1b44(0x4f5),'AsMuD':_0x5a1b44(0x324)+_0x5a1b44(0x3e2)+_0x5a1b44(0x461)+_0x5a1b44(0x43f)+_0x5a1b44(0x28a),'QPHFf':_0x5a1b44(0x280)+_0x5a1b44(0x374)+_0x5a1b44(0x3db)+_0x5a1b44(0x421)+_0x5a1b44(0x2a7)+':','yYven':_0x5a1b44(0x440),'aUdbM':_0x5a1b44(0x201)+'ge','iXzdk':_0x5a1b44(0x3c0)+_0x5a1b44(0x2bc)+_0x5a1b44(0x1ca)+_0x5a1b44(0x24f)+_0x5a1b44(0x38a),'NmibL':_0x5a1b44(0x168)+_0x5a1b44(0x1a2)+_0x5a1b44(0x160)+_0x5a1b44(0x4de)+_0x5a1b44(0x436)+_0x5a1b44(0x4d9)+_0x5a1b44(0x4e2),'XmPSO':_0x5a1b44(0x156)+_0x5a1b44(0x2fb)+_0x5a1b44(0x179)+_0x5a1b44(0x3cc)+_0x5a1b44(0x152)+_0x5a1b44(0x4bb),'SUYnj':_0x5a1b44(0x30b),'oBIAH':_0x5a1b44(0x184)+'e','bNpeA':_0x5a1b44(0x19d),'thOPg':_0x5a1b44(0x40a)+_0x5a1b44(0x18d)+_0x5a1b44(0x159)+_0x5a1b44(0x3ea)+_0x5a1b44(0x227)+_0x5a1b44(0x15f)+_0x5a1b44(0x165)+_0x5a1b44(0x39c)+_0x5a1b44(0x260)+')','LvAQZ':_0x5a1b44(0x3b5)+_0x5a1b44(0x180)+_0x5a1b44(0x21e)+_0x5a1b44(0x39a)+_0x5a1b44(0x406),'LDSpy':_0x5a1b44(0x43b)+_0x5a1b44(0x192)+_0x5a1b44(0x275)+_0x5a1b44(0x3a3)+_0x5a1b44(0x379)+_0x5a1b44(0x4ba),'GeEsL':_0x5a1b44(0x178)+_0x5a1b44(0x3a2)+_0x5a1b44(0x340)+_0x5a1b44(0x37b)+_0x5a1b44(0x3ee)+_0x5a1b44(0x303),'mCFin':_0x5a1b44(0x1d2)+_0x5a1b44(0x471)+_0x5a1b44(0x290)+_0x5a1b44(0x2cd)+_0x5a1b44(0x240)+_0x5a1b44(0x300)+_0x5a1b44(0x4e3)+_0x5a1b44(0x271),'GopuF':_0x5a1b44(0x457)+_0x5a1b44(0x21c)+_0x5a1b44(0x259),'fsiPZ':_0x5a1b44(0x309)+_0x5a1b44(0x34a),'OfiLo':_0x5a1b44(0x220)+_0x5a1b44(0x204)+_0x5a1b44(0x4e9)+_0x5a1b44(0x494),'EoBcO':_0x5a1b44(0x344)+_0x5a1b44(0x401)+_0x5a1b44(0x4c0)+_0x5a1b44(0x26b)+_0x5a1b44(0x1c2)+_0x5a1b44(0x4aa)+'?','OhBws':_0x5a1b44(0x250)+_0x5a1b44(0x295)+_0x5a1b44(0x4d1),'dnlZJ':_0x5a1b44(0x289)+_0x5a1b44(0x31e)+_0x5a1b44(0x145),'hHESV':_0x5a1b44(0x3b9)+_0x5a1b44(0x285),'xSNJo':_0x5a1b44(0x1cb)+_0x5a1b44(0x209)+_0x5a1b44(0x1dd)+_0x5a1b44(0x21a)+_0x5a1b44(0x2a9)+_0x5a1b44(0x356)+_0x5a1b44(0x143),'PrWTE':_0x5a1b44(0x1b9)+_0x5a1b44(0x3ad),'jNwpu':_0x5a1b44(0x20f)+_0x5a1b44(0x2b7)+_0x5a1b44(0x28f)+_0x5a1b44(0x1d9),'ugDJA':_0x5a1b44(0x407)+_0x5a1b44(0x1c3),'XjSZE':_0x5a1b44(0x327)+_0x5a1b44(0x186)+_0x5a1b44(0x1a4)+_0x5a1b44(0x2f7)+_0x5a1b44(0x1aa)+_0x5a1b44(0x2e3),'RETID':_0x5a1b44(0x161),'CJWIL':_0x5a1b44(0x16e),'bzGDC':_0x5a1b44(0x4b3),'DdpXd':_0x5a1b44(0x174)+_0x5a1b44(0x1f8),'prdGc':_0x5a1b44(0x442)+_0x5a1b44(0x4b4)+_0x5a1b44(0x2e4)+_0x5a1b44(0x4dd)+_0x5a1b44(0x485)+_0x5a1b44(0x46b),'RgRxS':_0x5a1b44(0x3e5)+_0x5a1b44(0x4a7)+_0x5a1b44(0x473)+_0x5a1b44(0x14d),'KXvyb':_0x5a1b44(0x267)+_0x5a1b44(0x23a)+_0x5a1b44(0x1d8)+_0x5a1b44(0x352),'ZmWqL':_0x5a1b44(0x3e6)+_0x5a1b44(0x218)+_0x5a1b44(0x4c3),'ZVhnP':_0x5a1b44(0x1db)+_0x5a1b44(0x3f7)+_0x5a1b44(0x202)+_0x5a1b44(0x2b1)+'al','YxAmF':_0x5a1b44(0x21d)+_0x5a1b44(0x1d7)+_0x5a1b44(0x25a)+_0x5a1b44(0x478)+_0x5a1b44(0x350)+_0x5a1b44(0x1c7),'tmfQm':_0x5a1b44(0x450)+_0x5a1b44(0x238)+_0x5a1b44(0x2fe)+_0x5a1b44(0x154),'UwzZR':_0x5a1b44(0x291)+_0x5a1b44(0x298)+_0x5a1b44(0x348)+_0x5a1b44(0x2ae),'UmEgJ':_0x5a1b44(0x199)+_0x5a1b44(0x479)+'ss','MtkIk':_0x5a1b44(0x453)+_0x5a1b44(0x47f),'OMdcL':_0x5a1b44(0x223)+_0x5a1b44(0x38c)+_0x5a1b44(0x35d)+_0x5a1b44(0x1d3)+_0x5a1b44(0x2a6)+_0x5a1b44(0x3be)+_0x5a1b44(0x16d),'vREDR':_0x5a1b44(0x2a3)+_0x5a1b44(0x13e)+_0x5a1b44(0x465),'jebrV':_0x5a1b44(0x328)+_0x5a1b44(0x2b9)+_0x5a1b44(0x3ec)+_0x5a1b44(0x42e)+'er','HLrLU':_0x5a1b44(0x3bb)+_0x5a1b44(0x2b6)+_0x5a1b44(0x438),'jNuNe':_0x5a1b44(0x444)+_0x5a1b44(0x162)+_0x5a1b44(0x1f5)+_0x5a1b44(0x148),'PPmNg':_0x5a1b44(0x27d)+_0x5a1b44(0x384)+_0x5a1b44(0x18f)+_0x5a1b44(0x445)+_0x5a1b44(0x2dd)+_0x5a1b44(0x1e0)+_0x5a1b44(0x18e)+_0x5a1b44(0x1eb)+_0x5a1b44(0x21b),'slBqD':_0x5a1b44(0x3c3)+_0x5a1b44(0x232)+_0x5a1b44(0x20a),'ZFDpI':_0x5a1b44(0x2a0)+_0x5a1b44(0x4ec)+_0x5a1b44(0x177)+_0x5a1b44(0x490),'nBusD':_0x5a1b44(0x37a)+_0x5a1b44(0x323)+_0x5a1b44(0x414)+'s','hrvBo':_0x5a1b44(0x3e0)+_0x5a1b44(0x2e9)+_0x5a1b44(0x38b),'HCEFz':_0x5a1b44(0x146)+_0x5a1b44(0x307)+_0x5a1b44(0x326)+_0x5a1b44(0x19f)+_0x5a1b44(0x46c)+_0x5a1b44(0x47a),'wSNeZ':_0x5a1b44(0x236)+_0x5a1b44(0x3ef)+'es','iEnEu':_0x5a1b44(0x1bf)+_0x5a1b44(0x342),'RTnaw':_0x5a1b44(0x29c)+_0x5a1b44(0x49a)+_0x5a1b44(0x153),'UTxIA':_0x5a1b44(0x333)+_0x5a1b44(0x4ef)+_0x5a1b44(0x1cd),'DHTsh':_0x5a1b44(0x3dd)+'AT','taNAk':_0x5a1b44(0x34d)+_0x5a1b44(0x47e)+_0x5a1b44(0x25d)+_0x5a1b44(0x448),'IcDQY':_0x5a1b44(0x34d)+_0x5a1b44(0x205)+_0x5a1b44(0x3e9)+_0x5a1b44(0x39e),'Wkswb':_0x5a1b44(0x34d)+_0x5a1b44(0x205)+_0x5a1b44(0x3e9)+_0x5a1b44(0x1ed)+'y','MVNWY':_0x5a1b44(0x1b5)+_0x5a1b44(0x3d5),'KOOGQ':_0x5a1b44(0x3fa)+_0x5a1b44(0x1ab)+_0x5a1b44(0x1f3)+'r','ZXzCt':_0x5a1b44(0x49f)+_0x5a1b44(0x261)+_0x5a1b44(0x337),'MTEch':_0x5a1b44(0x2eb)+_0x5a1b44(0x373)+_0x5a1b44(0x22f),'WlPKT':_0x5a1b44(0x32e)+_0x5a1b44(0x329),'LZPuk':_0x5a1b44(0x4b1)+_0x5a1b44(0x496)+_0x5a1b44(0x1e2)+_0x5a1b44(0x418)+_0x5a1b44(0x195)+'em','fUaav':_0x5a1b44(0x1fc)+_0x5a1b44(0x48e)+_0x5a1b44(0x2cc),'elTwJ':_0x5a1b44(0x2ea)+_0x5a1b44(0x2fc)+_0x5a1b44(0x248)+_0x5a1b44(0x15a),'uDzLD':_0x5a1b44(0x4cc)+_0x5a1b44(0x3ab)+_0x5a1b44(0x1b7)+_0x5a1b44(0x1e5),'nDBgS':_0x5a1b44(0x147)+_0x5a1b44(0x1e7)+'s','OrrAU':_0x5a1b44(0x26d)+_0x5a1b44(0x16f)+_0x5a1b44(0x1e9)+_0x5a1b44(0x237)+_0x5a1b44(0x141),'yBVlG':_0x5a1b44(0x308)+_0x5a1b44(0x3ed)+_0x5a1b44(0x1d6)+_0x5a1b44(0x219),'iNUNp':_0x5a1b44(0x481)+_0x5a1b44(0x329),'xPMNF':_0x5a1b44(0x3f8)+_0x5a1b44(0x15b)+_0x5a1b44(0x29e)+_0x5a1b44(0x2f3)+_0x5a1b44(0x296),'dHnlD':_0x5a1b44(0x489),'wsHfw':_0x5a1b44(0x251)+_0x5a1b44(0x472)+_0x5a1b44(0x2db),'eapYN':_0x5a1b44(0x325)+'P','ezost':_0x5a1b44(0x4d6)+_0x5a1b44(0x4a9)+_0x5a1b44(0x466),'XLQoO':_0x5a1b44(0x4d6)+_0x5a1b44(0x2de)+_0x5a1b44(0x48a),'VSdHU':_0x5a1b44(0x4da)+_0x5a1b44(0x17b)+_0x5a1b44(0x2f1),'CpipD':_0x5a1b44(0x3e3)+_0x5a1b44(0x1ff)+'ng','eiyhA':_0x5a1b44(0x41b)+_0x5a1b44(0x4b5),'CsXFU':_0x5a1b44(0x2ff)+_0x5a1b44(0x413),'mRphB':_0x5a1b44(0x1fb)+_0x5a1b44(0x173),'qsHml':_0x5a1b44(0x2e5)+_0x5a1b44(0x3a0)+_0x5a1b44(0x230)+_0x5a1b44(0x21f),'SXlSM':_0x5a1b44(0x302)+'P','MjkNg':_0x5a1b44(0x284)+_0x5a1b44(0x467),'NGatj':_0x5a1b44(0x284)+_0x5a1b44(0x375),'neTvU':_0x5a1b44(0x2e0)+_0x5a1b44(0x3c7)+'cy','tMgZI':_0x5a1b44(0x13d)+_0x5a1b44(0x367)+_0x5a1b44(0x27b)+_0x5a1b44(0x172),'xnmwY':_0x5a1b44(0x4ad)+_0x5a1b44(0x2c7)+_0x5a1b44(0x1b4)+'rs','QmyaF':_0x5a1b44(0x36c)+_0x5a1b44(0x170),'mmWlq':_0x5a1b44(0x44d)+_0x5a1b44(0x196)+_0x5a1b44(0x459)+'e','FKIuD':_0x5a1b44(0x24c)+_0x5a1b44(0x3a1)+_0x5a1b44(0x376)+_0x5a1b44(0x437)+'or','ZIKnd':_0x5a1b44(0x27c)+_0x5a1b44(0x446),'ACOkX':_0x5a1b44(0x315)+'se','IfQwS':_0x5a1b44(0x4e8)+_0x5a1b44(0x46e)+_0x5a1b44(0x23c)+_0x5a1b44(0x222),'RyQvj':_0x5a1b44(0x403)+_0x5a1b44(0x38f)+'al','jsHbr':_0x5a1b44(0x1bf)+_0x5a1b44(0x4c7)+_0x5a1b44(0x176)+_0x5a1b44(0x292),'NaARG':_0x5a1b44(0x2bd)+_0x5a1b44(0x17e)+_0x5a1b44(0x3eb),'HHZUo':_0x5a1b44(0x1ee)+_0x5a1b44(0x1c3),'nzGny':_0x5a1b44(0x197)+_0x5a1b44(0x3d8)+_0x5a1b44(0x32f)+_0x5a1b44(0x3e4)+_0x5a1b44(0x425)+_0x5a1b44(0x32b),'BJpDI':_0x5a1b44(0x14f)+_0x5a1b44(0x332),'jVkId':_0x5a1b44(0x213)+_0x5a1b44(0x29f)+_0x5a1b44(0x1f7),'olcZV':_0x5a1b44(0x462)+_0x5a1b44(0x2ef)+'y','EvEIn':_0x5a1b44(0x214),'MVYfJ':_0x5a1b44(0x2e6)+_0x5a1b44(0x1ce)+_0x5a1b44(0x167)+_0x5a1b44(0x3c8),'VDSHE':_0x5a1b44(0x385)+_0x5a1b44(0x49b)+_0x5a1b44(0x277),'RDKHx':_0x5a1b44(0x306)+_0x5a1b44(0x4b6)+_0x5a1b44(0x3d2),'wxpCG':_0x5a1b44(0x2ab),'uxkOo':_0x5a1b44(0x272)+_0x5a1b44(0x17c)+_0x5a1b44(0x1dc),'lNPka':_0x5a1b44(0x1e8)+_0x5a1b44(0x253)+_0x5a1b44(0x30e)+_0x5a1b44(0x3cb)+_0x5a1b44(0x221),'yXWyv':_0x5a1b44(0x3b6),'xdhXy':_0x5a1b44(0x2a4),'bMGbz':_0x5a1b44(0x454),'VXgks':_0x5a1b44(0x2d6),'woiAh':_0x5a1b44(0x38d)+_0x5a1b44(0x185)+_0x5a1b44(0x336)+_0x5a1b44(0x388),'bcteI':_0x5a1b44(0x191),'ZqXFK':_0x5a1b44(0x242)+_0x5a1b44(0x45b)+_0x5a1b44(0x1d0)+_0x5a1b44(0x3de)+_0x5a1b44(0x15d),'stMuj':_0x5a1b44(0x392),'ftgSm':_0x5a1b44(0x1a7),'qtFVi':_0x5a1b44(0x43a)+_0x5a1b44(0x2fa)+_0x5a1b44(0x2be)+_0x5a1b44(0x4c8)+_0x5a1b44(0x470)+':','AShWN':_0x5a1b44(0x142),'Zaxio':_0x5a1b44(0x3d9)+_0x5a1b44(0x2a4),'UowbF':_0x5a1b44(0x2a1)+_0x5a1b44(0x45f)+_0x5a1b44(0x28c)+_0x5a1b44(0x14c)+_0x5a1b44(0x17d)+'?','pKWJu':_0x5a1b44(0x345)+_0x5a1b44(0x480),'QjuSV':_0x5a1b44(0x4a0)+_0x5a1b44(0x4f0),'jjsBp':_0x5a1b44(0x225)+_0x5a1b44(0x41e)+_0x5a1b44(0x3b3)+_0x5a1b44(0x22a),'NbDPp':_0x5a1b44(0x239)+_0x5a1b44(0x2a4),'bYOFt':_0x5a1b44(0x293)+_0x5a1b44(0x45a)+_0x5a1b44(0x1c4)+_0x5a1b44(0x155),'pEBxb':_0x5a1b44(0x4b0)+_0x5a1b44(0x258)+_0x5a1b44(0x254)+_0x5a1b44(0x1f9),'gTYoN':_0x5a1b44(0x3c4)+_0x5a1b44(0x311)+'y','SuRiu':_0x5a1b44(0x3a5)+_0x5a1b44(0x226)+_0x5a1b44(0x3b1)+_0x5a1b44(0x329),'tBSXE':_0x5a1b44(0x497)+_0x5a1b44(0x349),'DplLj':_0x5a1b44(0x3b8)+_0x5a1b44(0x3c6)+'es','gNJVq':_0x5a1b44(0x257)+_0x5a1b44(0x151)+_0x5a1b44(0x469),'tJdgH':_0x5a1b44(0x4a4)+'ts','MHtNH':_0x5a1b44(0x4cd)+_0x5a1b44(0x1c8)+_0x5a1b44(0x336)+'s','cANLx':_0x5a1b44(0x411)+_0x5a1b44(0x262),'xxDDL':_0x5a1b44(0x2f5)+_0x5a1b44(0x2dc)+'ce','rGUGq':_0x5a1b44(0x441)+_0x5a1b44(0x1f0)+_0x5a1b44(0x24d)+_0x5a1b44(0x398),'OudZZ':_0x5a1b44(0x435)+_0x5a1b44(0x3aa),'BvYpX':_0x5a1b44(0x378)+_0x5a1b44(0x1a9),'Gzwly':_0x5a1b44(0x4bd)+_0x5a1b44(0x1ac),'BXJBV':_0x5a1b44(0x140)+_0x5a1b44(0x19c),'eTskK':_0x5a1b44(0x31f)+_0x5a1b44(0x1f1)+_0x5a1b44(0x432),'JUsAI':_0x5a1b44(0x4db),'HpRfQ':_0x5a1b44(0x16c)+_0x5a1b44(0x211)+'on','JmlSM':_0x5a1b44(0x1af)+_0x5a1b44(0x1f4),'JJOVj':_0x5a1b44(0x33d)+'Ds','LElVE':_0x5a1b44(0x396)+_0x5a1b44(0x1cf)+_0x5a1b44(0x2ca)+_0x5a1b44(0x313),'iNety':_0x5a1b44(0x13f),'dZnIk':_0x5a1b44(0x31d),'aaNOM':_0x5a1b44(0x187)+_0x5a1b44(0x2fd)+_0x5a1b44(0x247)+_0x5a1b44(0x46d),'ramdd':_0x5a1b44(0x4d2),'Bnqal':_0x5a1b44(0x244)+_0x5a1b44(0x32a)+_0x5a1b44(0x310)+'Is','VilME':_0x5a1b44(0x171)+_0x5a1b44(0x1df),'MtNLv':_0x5a1b44(0x47c)+'ry','IoDFG':_0x5a1b44(0x3e7)+_0x5a1b44(0x41c)+_0x5a1b44(0x1e1)+_0x5a1b44(0x493),'WIjou':_0x5a1b44(0x47b),'kctKf':_0x5a1b44(0x347),'qZEJf':_0x5a1b44(0x4be)+'e','eZELr':_0x5a1b44(0x4bf),'RuBUd':_0x5a1b44(0x264)+_0x5a1b44(0x17f)+_0x5a1b44(0x496)+_0x5a1b44(0x30d),'lqFDz':_0x5a1b44(0x2d1),'ddEvv':_0x5a1b44(0x1c9),'PTHxn':_0x5a1b44(0x1a6),'qvWLQ':_0x5a1b44(0x4f2),'nwrqa':_0x5a1b44(0x270)+_0x5a1b44(0x475)+'?','EhqeF':_0x5a1b44(0x4c2)+_0x5a1b44(0x488),'QXGFK':_0x5a1b44(0x419)+_0x5a1b44(0x417),'bWNHA':_0x5a1b44(0x27e)+_0x5a1b44(0x4f4),'aoAoh':_0x5a1b44(0x265),'BRflm':_0x5a1b44(0x20e)+_0x5a1b44(0x399)+_0x5a1b44(0x44e),'WPpXs':_0x5a1b44(0x23e)+_0x5a1b44(0x2aa)+_0x5a1b44(0x1e3)+_0x5a1b44(0x235),'OfZrk':_0x5a1b44(0x26a)+_0x5a1b44(0x4f3)+_0x5a1b44(0x2d2),'xCudZ':_0x5a1b44(0x23e)+_0x5a1b44(0x2aa)+_0x5a1b44(0x40f)+_0x5a1b44(0x2ae),'PVMfU':_0x5a1b44(0x2e1)+_0x5a1b44(0x287)+_0x5a1b44(0x3e1),'mnYKY':_0x5a1b44(0x20e)+_0x5a1b44(0x4e4)+_0x5a1b44(0x395),'KdKip':_0x5a1b44(0x3cf)+_0x5a1b44(0x206),'cBoEx':_0x5a1b44(0x443)+_0x5a1b44(0x269)+_0x5a1b44(0x1bc)+'r','LYJIL':_0x5a1b44(0x3cd)+_0x5a1b44(0x3f1)+_0x5a1b44(0x40b),'OaqKJ':_0x5a1b44(0x3a8)+_0x5a1b44(0x44b),'coubI':_0x5a1b44(0x1ad)+_0x5a1b44(0x1bd)+_0x5a1b44(0x188),'MOhTe':_0x5a1b44(0x1c5),'OlBac':_0x5a1b44(0x2c5),'bskyY':_0x5a1b44(0x17a),'LetnO':_0x5a1b44(0x452),'GNxns':_0x5a1b44(0x2b0)+_0x5a1b44(0x4a3)+_0x5a1b44(0x1fa),'PkKVQ':_0x5a1b44(0x2c1),'OjfgB':_0x5a1b44(0x2ba)+_0x5a1b44(0x35f),'glhKA':_0x5a1b44(0x4ce)+_0x5a1b44(0x43c)+_0x5a1b44(0x25e),'eWXGf':_0x5a1b44(0x23d),'zlLVY':_0x5a1b44(0x3df)+_0x5a1b44(0x4ac)+_0x5a1b44(0x2cb)+_0x5a1b44(0x249),'mGRFQ':_0x5a1b44(0x4af),'eADNC':_0x5a1b44(0x426),'vriNI':_0x5a1b44(0x341),'jbZGR':_0x5a1b44(0x391),'QORQm':_0x5a1b44(0x36b)+_0x5a1b44(0x158)+_0x5a1b44(0x294)+'?','nuzps':_0x5a1b44(0x38e),'djNjW':_0x5a1b44(0x200),'CdCCL':_0x5a1b44(0x30a),'bhDpb':_0x5a1b44(0x431),'WHMgp':_0x5a1b44(0x20e)+_0x5a1b44(0x4b7)+_0x5a1b44(0x16b)+'s?','DGJnp':_0x5a1b44(0x252),'sKgYq':_0x5a1b44(0x1c9)+_0x5a1b44(0x229)+_0x5a1b44(0x305),'ZHMmF':_0x5a1b44(0x433),'nfaZB':_0x5a1b44(0x377),'waCne':_0x5a1b44(0x368)+_0x5a1b44(0x3af)+_0x5a1b44(0x1be)+_0x5a1b44(0x395),'hLWOl':_0x5a1b44(0x49e),'OVUBl':_0x5a1b44(0x35a)+_0x5a1b44(0x20b)+_0x5a1b44(0x394),'pfbWC':_0x5a1b44(0x1bb),'Iwrpq':_0x5a1b44(0x1c0)+'e','RTtlj':_0x5a1b44(0x34f)+_0x5a1b44(0x364)+_0x5a1b44(0x1b0)+_0x5a1b44(0x464)+_0x5a1b44(0x2d0)+_0x5a1b44(0x41d),'pPbnU':function(_0x533718){return _0x533718();},'NoLvG':function(_0x54e7e7,_0x3f4dd8){return _0x54e7e7(_0x3f4dd8);},'GqFNd':_0x5a1b44(0x416)+_0x5a1b44(0x2f6)+_0x5a1b44(0x3ba)},_0x225d63=_0x52bb0f[_0x5a1b44(0x4a5)][_0x5a1b44(0x408)]('|');let _0x1c4381=-0x1*0x1fe1+0x9f*0x1d+-0x163*-0xa;while(!![]){switch(_0x225d63[_0x1c4381++]){case'0':userData={'region':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x3f9)])[_0x5a1b44(0x4c5)],'location':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x2a8)])[_0x5a1b44(0x4c5)],'empCode':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x181)])[_0x5a1b44(0x4c5)],'name':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x3d6)])[_0x5a1b44(0x4c5)],'function':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x40e)])[_0x5a1b44(0x4c5)],'subDepartment':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x383)])[_0x5a1b44(0x4c5)],'date':today};continue;case'1':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x2c8)])[_0x5a1b44(0x28d)][_0x5a1b44(0x29b)](_0x52bb0f[_0x5a1b44(0x1d4)]);continue;case'2':document[_0x5a1b44(0x4c9)+_0x5a1b44(0x3fd)](_0x52bb0f[_0x5a1b44(0x486)])[_0x5a1b44(0x28d)][_0x5a1b44(0x498)](_0x52bb0f[_0x5a1b44(0x1d4)]);continue;case'3':_0x52bb0f[_0x5a1b44(0x319)](userData[_0x5a1b44(0x44c)+_0x5a1b44(0x4e1)],_0x52bb0f[_0x5a1b44(0x33c)])?questions=[{'q':_0x52bb0f[_0x5a1b44(0x363)],'options':[_0x52bb0f[_0x5a1b44(0x34e)],_0x52bb0f[_0x5a1b44(0x2f9)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x2e2)],'options':[_0x52bb0f[_0x5a1b44(0x34e)],_0x52bb0f[_0x5a1b44(0x2f9)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x48c)],'options':[_0x52bb0f[_0x5a1b44(0x1ae)],_0x52bb0f[_0x5a1b44(0x1ef)],_0x52bb0f[_0x5a1b44(0x243)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x2f8)],'options':[_0x52bb0f[_0x5a1b44(0x34e)],_0x52bb0f[_0x5a1b44(0x2f9)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x32d)],'options':[_0x52bb0f[_0x5a1b44(0x241)],_0x52bb0f[_0x5a1b44(0x4ca)],_0x52bb0f[_0x5a1b44(0x1da)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x2af)],'options':[_0x52bb0f[_0x5a1b44(0x34e)],_0x52bb0f[_0x5a1b44(0x2f9)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x362)],'options':[_0x52bb0f[_0x5a1b44(0x34e)],_0x52bb0f[_0x5a1b44(0x2f9)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x3f6)],'options':[_0x52bb0f[_0x5a1b44(0x34e)],_0x52bb0f[_0x5a1b44(0x2f9)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x4dc)],'options':[_0x52bb0f[_0x5a1b44(0x34e)],_0x52bb0f[_0x5a1b44(0x2f9)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x1a8)],'options':[_0x52bb0f[_0x5a1b44(0x1a5)],_0x52bb0f[_0x5a1b44(0x2c2)],_0x52bb0f[_0x5a1b44(0x44f)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x463)],'options':[_0x52bb0f[_0x5a1b44(0x39d)],_0x52bb0f[_0x5a1b44(0x2f2)],_0x52bb0f[_0x5a1b44(0x320)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x3c2)],'options':[_0x52bb0f[_0x5a1b44(0x37d)],_0x52bb0f[_0x5a1b44(0x16a)],_0x52bb0f[_0x5a1b44(0x150)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x35c)],'options':[_0x52bb0f[_0x5a1b44(0x25c)],_0x52bb0f[_0x5a1b44(0x359)],_0x52bb0f[_0x5a1b44(0x263)],_0x52bb0f[_0x5a1b44(0x380)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x322)],'options':[_0x52bb0f[_0x5a1b44(0x456)],_0x52bb0f[_0x5a1b44(0x36d)],_0x52bb0f[_0x5a1b44(0x402)],_0x52bb0f[_0x5a1b44(0x3ac)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x49c)],'options':[_0x52bb0f[_0x5a1b44(0x203)],_0x52bb0f[_0x5a1b44(0x420)],_0x52bb0f[_0x5a1b44(0x474)],_0x52bb0f[_0x5a1b44(0x335)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x343)],'options':[_0x52bb0f[_0x5a1b44(0x22b)],_0x52bb0f[_0x5a1b44(0x1ba)],_0x52bb0f[_0x5a1b44(0x3dc)],_0x52bb0f[_0x5a1b44(0x246)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x35e)],'options':[_0x52bb0f[_0x5a1b44(0x316)],_0x52bb0f[_0x5a1b44(0x4ee)],_0x52bb0f[_0x5a1b44(0x26e)],_0x52bb0f[_0x5a1b44(0x25b)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x2e8)],'options':[_0x52bb0f[_0x5a1b44(0x1b6)],_0x52bb0f[_0x5a1b44(0x27a)],_0x52bb0f[_0x5a1b44(0x3b2)],_0x52bb0f[_0x5a1b44(0x429)]],'answer':0x1}]:questions=[{'q':_0x52bb0f[_0x5a1b44(0x20d)],'options':[_0x52bb0f[_0x5a1b44(0x1ec)],_0x52bb0f[_0x5a1b44(0x404)],_0x52bb0f[_0x5a1b44(0x198)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x4cf)],'options':[_0x52bb0f[_0x5a1b44(0x169)],_0x52bb0f[_0x5a1b44(0x212)],_0x52bb0f[_0x5a1b44(0x381)],_0x52bb0f[_0x5a1b44(0x1fe)]],'answer':0x3},{'q':_0x52bb0f[_0x5a1b44(0x314)],'options':[_0x52bb0f[_0x5a1b44(0x283)],_0x52bb0f[_0x5a1b44(0x41a)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x233)],'options':[_0x52bb0f[_0x5a1b44(0x360)],_0x52bb0f[_0x5a1b44(0x1cc)],_0x52bb0f[_0x5a1b44(0x4eb)],_0x52bb0f[_0x5a1b44(0x48b)]],'answer':0x3},{'q':_0x52bb0f[_0x5a1b44(0x255)],'options':[_0x52bb0f[_0x5a1b44(0x4c1)],_0x52bb0f[_0x5a1b44(0x321)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x234)],'options':[_0x52bb0f[_0x5a1b44(0x4b2)],_0x52bb0f[_0x5a1b44(0x386)],_0x52bb0f[_0x5a1b44(0x39f)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x32c)],'options':[_0x52bb0f[_0x5a1b44(0x4ab)],_0x52bb0f[_0x5a1b44(0x31c)],_0x52bb0f[_0x5a1b44(0x331)],_0x52bb0f[_0x5a1b44(0x48f)]],'answer':0x3},{'q':_0x52bb0f[_0x5a1b44(0x1a1)],'options':[_0x52bb0f[_0x5a1b44(0x2c9)],_0x52bb0f[_0x5a1b44(0x460)],_0x52bb0f[_0x5a1b44(0x2bf)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x3ae)],'options':[_0x52bb0f[_0x5a1b44(0x3f3)],_0x52bb0f[_0x5a1b44(0x4d3)],_0x52bb0f[_0x5a1b44(0x23f)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x4f1)],'options':[_0x52bb0f[_0x5a1b44(0x207)],_0x52bb0f[_0x5a1b44(0x2ed)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x2da)],'options':[_0x52bb0f[_0x5a1b44(0x216)],_0x52bb0f[_0x5a1b44(0x224)],_0x52bb0f[_0x5a1b44(0x37c)],_0x52bb0f[_0x5a1b44(0x2b3)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x27f)],'options':[_0x52bb0f[_0x5a1b44(0x281)],_0x52bb0f[_0x5a1b44(0x24b)],_0x52bb0f[_0x5a1b44(0x1d5)],_0x52bb0f[_0x5a1b44(0x3a9)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x43d)],'options':[_0x52bb0f[_0x5a1b44(0x189)],_0x52bb0f[_0x5a1b44(0x14b)],_0x52bb0f[_0x5a1b44(0x422)],_0x52bb0f[_0x5a1b44(0x286)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x390)],'options':[_0x52bb0f[_0x5a1b44(0x2a2)],_0x52bb0f[_0x5a1b44(0x2c0)],_0x52bb0f[_0x5a1b44(0x2e7)],_0x52bb0f[_0x5a1b44(0x2f4)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x1f6)],'options':[_0x52bb0f[_0x5a1b44(0x2a2)],_0x52bb0f[_0x5a1b44(0x29a)],_0x52bb0f[_0x5a1b44(0x2c0)],'SA'],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x3a6)],'options':[_0x52bb0f[_0x5a1b44(0x175)],_0x52bb0f[_0x5a1b44(0x3d0)],_0x52bb0f[_0x5a1b44(0x2a2)],'SA'],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x278)],'options':[_0x52bb0f[_0x5a1b44(0x312)],_0x52bb0f[_0x5a1b44(0x495)],_0x52bb0f[_0x5a1b44(0x3d0)],_0x52bb0f[_0x5a1b44(0x175)]],'answer':0x3},{'q':_0x52bb0f[_0x5a1b44(0x4e0)],'options':[_0x52bb0f[_0x5a1b44(0x389)],_0x52bb0f[_0x5a1b44(0x3a7)],_0x52bb0f[_0x5a1b44(0x208)],_0x52bb0f[_0x5a1b44(0x3f4)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x4e7)],'options':[_0x52bb0f[_0x5a1b44(0x2e7)],_0x52bb0f[_0x5a1b44(0x2f4)],_0x52bb0f[_0x5a1b44(0x29a)],_0x52bb0f[_0x5a1b44(0x2a2)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x256)],'options':[_0x52bb0f[_0x5a1b44(0x4d8)],_0x52bb0f[_0x5a1b44(0x2b8)],_0x52bb0f[_0x5a1b44(0x297)],_0x52bb0f[_0x5a1b44(0x3b0)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x434)],'options':[_0x52bb0f[_0x5a1b44(0x468)],_0x52bb0f[_0x5a1b44(0x217)],_0x52bb0f[_0x5a1b44(0x3c9)],_0x52bb0f[_0x5a1b44(0x1a3)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x455)],'options':[_0x52bb0f[_0x5a1b44(0x304)],_0x52bb0f[_0x5a1b44(0x282)],_0x52bb0f[_0x5a1b44(0x397)],_0x52bb0f[_0x5a1b44(0x2d9)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x1b2)],'options':[_0x52bb0f[_0x5a1b44(0x451)],_0x52bb0f[_0x5a1b44(0x46f)],_0x52bb0f[_0x5a1b44(0x288)],_0x52bb0f[_0x5a1b44(0x4c4)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x4d4)],'options':[_0x52bb0f[_0x5a1b44(0x23b)],_0x52bb0f[_0x5a1b44(0x268)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x19a)],'options':[_0x52bb0f[_0x5a1b44(0x351)],_0x52bb0f[_0x5a1b44(0x477)],_0x52bb0f[_0x5a1b44(0x447)],_0x52bb0f[_0x5a1b44(0x2c4)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x424)],'options':[_0x52bb0f[_0x5a1b44(0x458)],_0x52bb0f[_0x5a1b44(0x34c)],_0x52bb0f[_0x5a1b44(0x1e6)],_0x52bb0f[_0x5a1b44(0x2f0)]],'answer':0x3},{'q':_0x52bb0f[_0x5a1b44(0x2ee)],'options':[_0x52bb0f[_0x5a1b44(0x24e)],_0x52bb0f[_0x5a1b44(0x18b)],_0x52bb0f[_0x5a1b44(0x4a2)],_0x52bb0f[_0x5a1b44(0x483)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x482)],'options':[_0x52bb0f[_0x5a1b44(0x4b9)],_0x52bb0f[_0x5a1b44(0x3f0)],_0x52bb0f[_0x5a1b44(0x4bc)],_0x52bb0f[_0x5a1b44(0x4ea)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x149)],'options':[_0x52bb0f[_0x5a1b44(0x2c3)],_0x52bb0f[_0x5a1b44(0x47d)],_0x52bb0f[_0x5a1b44(0x4e5)],_0x52bb0f[_0x5a1b44(0x42f)]],'answer':0x0},{'q':_0x52bb0f[_0x5a1b44(0x3fc)],'options':[_0x52bb0f[_0x5a1b44(0x190)],_0x52bb0f[_0x5a1b44(0x3d3)],_0x52bb0f[_0x5a1b44(0x273)],_0x52bb0f[_0x5a1b44(0x4d5)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x279)],'options':[_0x52bb0f[_0x5a1b44(0x338)],_0x52bb0f[_0x5a1b44(0x2d4)],_0x52bb0f[_0x5a1b44(0x3d1)],_0x52bb0f[_0x5a1b44(0x28e)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x492)],'options':[_0x52bb0f[_0x5a1b44(0x163)],_0x52bb0f[_0x5a1b44(0x2d3)],_0x52bb0f[_0x5a1b44(0x484)],_0x52bb0f[_0x5a1b44(0x2ce)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x2ec)],'options':[_0x52bb0f[_0x5a1b44(0x33b)],_0x52bb0f[_0x5a1b44(0x13b)],_0x52bb0f[_0x5a1b44(0x4cb)],_0x52bb0f[_0x5a1b44(0x415)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x365)],'options':[_0x52bb0f[_0x5a1b44(0x3e8)],_0x52bb0f[_0x5a1b44(0x41f)],_0x52bb0f[_0x5a1b44(0x44a)],_0x52bb0f[_0x5a1b44(0x430)]],'answer':0x2},{'q':_0x52bb0f[_0x5a1b44(0x4c6)],'options':[_0x52bb0f[_0x5a1b44(0x4a6)],_0x52bb0f[_0x5a1b44(0x1d1)],_0x52bb0f[_0x5a1b44(0x231)],_0x52bb0f[_0x5a1b44(0x4d0)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x1c6)],'options':[_0x52bb0f[_0x5a1b44(0x499)],_0x52bb0f[_0x5a1b44(0x31b)],_0x52bb0f[_0x5a1b44(0x2a5)],_0x52bb0f[_0x5a1b44(0x2bb)]],'answer':0x1},{'q':_0x52bb0f[_0x5a1b44(0x405)],'options':[_0x52bb0f[_0x5a1b44(0x23b)],_0x52bb0f[_0x5a1b44(0x268)]],'answer':0x1}];continue;case'4':_0x52bb0f[_0x5a1b44(0x164)](loadQuestion);continue;case'5':currentQ=-0x1d*-0xa2+0x21c8+0x3422*-0x1;continue;case'6':if(!userData[_0x5a1b44(0x33f)]||!userData[_0x5a1b44(0x42c)]||!userData[_0x5a1b44(0x1de)]||!userData[_0x5a1b44(0x4a8)]||!userData[_0x5a1b44(0x44c)+_0x5a1b44(0x4e1)]){_0x52bb0f[_0x5a1b44(0x13c)](alert,_0x52bb0f[_0x5a1b44(0x2cf)]);return;}continue;case'7':score=-0x16f7+-0x18e6+0x2fdd;continue;}break;}}function loadQuestion(){const _0x32c652=_0xac80e6,_0x336b08={'TrNfF':_0x32c652(0x15e),'xgnFz':_0x32c652(0x1b3)+_0x32c652(0x30f)+_0x32c652(0x3a4)+_0x32c652(0x22d),'FsgfF':_0x32c652(0x3c5),'pNuGq':function(_0x40f3b9,_0x87b1ba){return _0x40f3b9+_0x87b1ba;},'QRyKJ':_0x32c652(0x3d4)},_0xead843=questions[currentQ];document[_0x32c652(0x4c9)+_0x32c652(0x3fd)](_0x336b08[_0x32c652(0x194)])[_0x32c652(0x2d8)]='Q'+_0x336b08[_0x32c652(0x3c1)](currentQ,-0x6b6*0x3+0xe2*0xa+0xb4f)+'.\x20'+_0xead843['q'];const _0xac72d8=document[_0x32c652(0x4c9)+_0x32c652(0x3fd)](_0x336b08[_0x32c652(0x409)]);_0xac72d8[_0x32c652(0x3f2)]='',_0xead843[_0x32c652(0x3da)][_0x32c652(0x144)]((_0x135dd3,_0x45b953)=>{const _0x59cdf9=_0x32c652,_0x20aa8b=document[_0x59cdf9(0x3bd)+_0x59cdf9(0x4e1)](_0x336b08[_0x59cdf9(0x36a)]);_0x20aa8b[_0x59cdf9(0x2d8)]=_0x135dd3,_0x20aa8b[_0x59cdf9(0x334)]=_0x336b08[_0x59cdf9(0x18a)],_0x20aa8b[_0x59cdf9(0x1f2)]=()=>checkAnswer(_0x45b953),_0xac72d8[_0x59cdf9(0x274)+'d'](_0x20aa8b);});}function checkAnswer(_0x53ce03){const _0x298b01=_0xac80e6,_0x1d3300={'MNHOz':function(_0x1e0a44,_0x55eece){return _0x1e0a44===_0x55eece;},'EDjAn':_0x298b01(0x18c)+'s','EIqew':_0x298b01(0x19b),'IrqWB':function(_0xd112a9,_0x288e25){return _0xd112a9<_0x288e25;},'wSdrp':function(_0x4b8f0a){return _0x4b8f0a();},'CChwQ':function(_0x2b27c3){return _0x2b27c3();},'tXHhI':_0x298b01(0x49d)+'n','MiLhw':function(_0xdf850c,_0x4d4c26){return _0xdf850c===_0x4d4c26;},'aKHcx':function(_0x154680,_0x163ae1,_0x108ea0){return _0x154680(_0x163ae1,_0x108ea0);}},_0x1251e1=document[_0x298b01(0x24a)+_0x298b01(0x22e)](_0x1d3300[_0x298b01(0x3ce)]);_0x1251e1[_0x298b01(0x144)]((_0x4481f9,_0x285b3a)=>{const _0x4f9ebc=_0x298b01;if(_0x1d3300[_0x4f9ebc(0x427)](_0x285b3a,questions[currentQ][_0x4f9ebc(0x1a0)]))_0x4481f9[_0x4f9ebc(0x28d)][_0x4f9ebc(0x29b)](_0x1d3300[_0x4f9ebc(0x410)]);else{if(_0x1d3300[_0x4f9ebc(0x427)](_0x285b3a,_0x53ce03))_0x4481f9[_0x4f9ebc(0x28d)][_0x4f9ebc(0x29b)](_0x1d3300[_0x4f9ebc(0x35b)]);}_0x4481f9[_0x4f9ebc(0x369)]=!![];});if(_0x1d3300[_0x298b01(0x45d)](_0x53ce03,questions[currentQ][_0x298b01(0x1a0)]))score++;currentQ++,_0x1d3300[_0x298b01(0x14a)](setTimeout,()=>{const _0x5d431c=_0x298b01;if(_0x1d3300[_0x5d431c(0x15c)](currentQ,questions[_0x5d431c(0x193)]))_0x1d3300[_0x5d431c(0x354)](loadQuestion);else _0x1d3300[_0x5d431c(0x3b4)](showResult);},0xb*-0xc6+-0xcb*-0x1d+-0xe73);}function showResult(){const _0x38f13a=_0xac80e6,_0x1dc188={'wTYWm':_0x38f13a(0x382)+'us','DYPva':function(_0x20f479,_0x55ac9b){return _0x20f479+_0x55ac9b;},'cHTOx':_0x38f13a(0x43e),'EbncH':_0x38f13a(0x37f),'VRrAy':_0x38f13a(0x423)+'n','pcESu':_0x38f13a(0x14e),'ItPtH':_0x38f13a(0x3fe)+_0x38f13a(0x476),'HxUrT':_0x38f13a(0x439)+'s','crZlR':_0x38f13a(0x370),'hSYHI':function(_0x5391f7,_0x593eec,_0x443b4b){return _0x5391f7(_0x593eec,_0x443b4b);},'tazRg':_0x38f13a(0x3d7),'gRZLH':_0x38f13a(0x30c),'vywMc':_0x38f13a(0x3f5)+_0x38f13a(0x4ed)};document[_0x38f13a(0x4c9)+_0x38f13a(0x3fd)](_0x1dc188[_0x38f13a(0x1ea)])[_0x38f13a(0x28d)][_0x38f13a(0x29b)](_0x1dc188[_0x38f13a(0x166)]),document[_0x38f13a(0x4c9)+_0x38f13a(0x3fd)](_0x1dc188[_0x38f13a(0x215)])[_0x38f13a(0x28d)][_0x38f13a(0x498)](_0x1dc188[_0x38f13a(0x166)]),document[_0x38f13a(0x4c9)+_0x38f13a(0x3fd)](_0x1dc188[_0x38f13a(0x317)])[_0x38f13a(0x2d8)]=_0x38f13a(0x33a)+userData[_0x38f13a(0x33f)]+_0x38f13a(0x4ae)+userData[_0x38f13a(0x42c)]+_0x38f13a(0x2b5)+userData[_0x38f13a(0x4a8)]+_0x38f13a(0x183)+userData[_0x38f13a(0x44c)+_0x38f13a(0x4e1)],document[_0x38f13a(0x4c9)+_0x38f13a(0x3fd)](_0x1dc188[_0x38f13a(0x299)])[_0x38f13a(0x2d8)]=_0x38f13a(0x371)+score+_0x38f13a(0x45c)+questions[_0x38f13a(0x193)],_0x1dc188[_0x38f13a(0x210)](fetch,_0x1dc188[_0x38f13a(0x48d)],{'method':_0x1dc188[_0x38f13a(0x42b)],'headers':{'Content-Type':_0x1dc188[_0x38f13a(0x1c1)]},'body':JSON[_0x38f13a(0x31a)]({...userData,'score':score,'total':questions[_0x38f13a(0x193)]})})[_0x38f13a(0x3ff)](_0x53324f=>_0x53324f[_0x38f13a(0x4a1)]())[_0x38f13a(0x3ff)](_0x3cc01b=>{const _0x408036=_0x38f13a;document[_0x408036(0x4c9)+_0x408036(0x3fd)](_0x1dc188[_0x408036(0x3bf)])[_0x408036(0x2d8)]=_0x1dc188[_0x408036(0x428)](_0x1dc188[_0x408036(0x42a)],_0x3cc01b[_0x408036(0x40c)]);})[_0x38f13a(0x33e)](()=>{const _0x521a14=_0x38f13a;document[_0x521a14(0x4c9)+_0x521a14(0x3fd)](_0x1dc188[_0x521a14(0x3bf)])[_0x521a14(0x2d8)]=_0x1dc188[_0x521a14(0x2df)];});}
 </script>
 
 </body>
