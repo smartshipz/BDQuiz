@@ -4,6 +4,15 @@
     <title>Quiz Report</title>
     <style>
        <style>
+
+ :root {
+      --primary: #003366;    /* Blue Dart Navy */
+      --accent: #ffcc00;     /* Blue Dart Gold */
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --bg: #f8fafc;
+    }
     /* General Page Styling */
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,15 +22,20 @@
     }
 
      header {
-      margin-bottom: 32px;
-    }
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
 
-    h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      color: var(--primary);
-      font-weight: 700;
-    }
+h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #003366; /* Your Blue Dart Navy */
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+}
 
 
     /* Table Styling */
@@ -113,13 +127,60 @@
 tr:nth-child(even) { background-color: #f2f2f2; }
 tr:hover { background-color: #ddd; }
 button:hover { background-color: darkblue; cursor: pointer; }
+
+
+.controls-row {
+    display: flex;
+    justify-content: space-between; /* Pushes items to opposite ends */
+    align-items: center;            /* Vertically centers them */
+    margin-bottom: 20px;
+    max-width: 100%;
+}
+
+#searchInput {
+    padding: 10px 15px;
+    width: 300px; /* Adjust width as needed */
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+}
+
+.btn-export {
+   /* Always visible state */
+    background-color: #27ae60 !important; /* Explicit professional green */
+    color: white !important;              /* Ensure text is always white */
+    
+    /* Layout */
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    
+    /* Smooth transition */
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.btn-export:hover {
+    background-color: #219150 !important; /* Darker green on hover */
+    transform: translateY(-1px);
+}
 </style>
     </style>
 </head>
 <body>
-    <h2 style="text-align:center;">Employee Assessment Report</h2>
-<div style="text-align:center; margin-bottom:10px;">
-    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for names.." style="padding:4px; width:200px;">
+<header>
+    <h2 style="text-align:center;">Employee Assessment Report</h2><br>
+</header>
+
+<div class="controls-row">
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="🔍 Search name or location...">
+    <button class="btn-export" onclick="exportToCSV()">
+        Export to CSV
+    </button>
+</div>
 </div>
     <table>
         <tr>
@@ -148,13 +209,7 @@ button:hover { background-color: darkblue; cursor: pointer; }
         {% endfor %}
     </table>
     <br>
-    <div style="text-align:center; margin-top:20px;">
-    <button onclick="exportToCSV()" 
-        style="padding:10px 20px; font-size:16px; background-color:blue; color:white; border:none; border-radius:5px;">
-        Export to CSV
-    </button>
-</div>
-    <div style="text-align:center;">
+        <div style="text-align:center;">
         <a href="/">Go to Quiz</a>
     </div>
 </body>
