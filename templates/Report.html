@@ -3,13 +3,124 @@
 <head>
     <title>Quiz Report</title>
     <style>
-        table { border-collapse: collapse; width: 70%; margin: auto; }
-        th, td { border: 1px solid black; padding: 10px; text-align: center; }
-        th { background-color: lightblue; }
+       <style>
+    /* General Page Styling */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7f6;
+        color: #333;
+        margin: 40px;
+    }
+
+     header {
+      margin-bottom: 32px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+
+    /* Table Styling */
+    table {
+        border-collapse: collapse;
+        width: 90%;
+        margin: 20px auto;
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        border-radius: 8px;
+        overflow: hidden; /* Ensures rounded corners work */
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left; /* Professional standard is left-aligned for text */
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Header Styling */
+    th {
+        background-color: #2980b9; /* Professional dark blue */
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 14px;
+    }
+
+    /* Zebra Striping */
+    tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    /* Hover Effect */
+    tr:hover {
+        background-color: #ebf5fb;
+        transition: background-color 0.2s ease;
+    }
+
+    /* Score Column - Center Align */
+    td:nth-child(8), td:nth-child(9) {
+        text-align: center;
+        font-weight: bold;
+    }
+
+    /* Button Styling */
+    .button-container {
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    button {
+        padding: 12px 25px;
+        font-size: 14px;
+        font-weight: bold;
+        background-color: #27ae60; /* Professional green */
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.1s, background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #219150;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    /* Link Styling */
+    .footer-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .footer-link a {
+        color: #7f8c8d;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .footer-link a:hover {
+        text-decoration: underline;
+    }
+
+tr:nth-child(even) { background-color: #f2f2f2; }
+tr:hover { background-color: #ddd; }
+button:hover { background-color: darkblue; cursor: pointer; }
+</style>
     </style>
 </head>
 <body>
-    <h2 style="text-align:center;">Quiz Score Report</h2>
+    <h2 style="text-align:center;">Employee Assessment Report</h2>
+<div style="text-align:center; margin-bottom:10px;">
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for names.." style="padding:4px; width:200px;">
+</div>
     <table>
         <tr>
             <th>ID</th>
@@ -74,6 +185,17 @@ function exportToCSV() {
     link.href = URL.createObjectURL(csvFile);
     link.download = "Quiz_Report.csv";
     link.click();
+}
+
+
+function filterTable() {
+    let input = document.getElementById("searchInput").value.toUpperCase();
+    let rows = document.querySelector("table").querySelectorAll("tr:not(:first-child)");
+    
+    rows.forEach(row => {
+        let nameStr = row.cells[5].innerText.toUpperCase(); // Index 5 is the Name column
+        row.style.display = nameStr.includes(input) ? "" : "none";
+    });
 }
 </script>
 </html>
